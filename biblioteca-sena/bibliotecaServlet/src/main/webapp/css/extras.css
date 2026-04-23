@@ -1,0 +1,409 @@
+/* ═══════════════════════════════════════════════════════════════
+   BIBLIOTECA SENA — extras.css
+   Clases complementarias: días-badge, QR, recibo, modo claro,
+   bienvenida estudiante, dashboard, registro.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   DÍAS RESTANTES  (prestamo.jsp)
+   ────────────────────────────────────────────────────────────── */
+.dias-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .22em .75em;
+    border-radius: 50px;
+    font-size: .78rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.dias-ok {
+    background: rgba(74, 222, 128, .13);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, .3);
+}
+.dias-warning {
+    background: rgba(251, 191, 36, .13);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, .35);
+}
+.dias-vencido {
+    background: rgba(248, 113, 113, .13);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, .35);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BOTÓN QR  (prestamo.jsp)
+   ────────────────────────────────────────────────────────────── */
+.btn-qr {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .8rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s;
+    background: rgba(156, 39, 176, .15);
+    border: 1px solid rgba(156, 39, 176, .35);
+    color: #CE93D8;
+}
+.btn-qr:hover {
+    background: rgba(156, 39, 176, .35);
+    color: #fff;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BOTÓN RECIBO  (Multa.jsp)
+   ────────────────────────────────────────────────────────────── */
+.btn-recibo {
+    background: rgba(255, 213, 79, .1);
+    border: 1px solid rgba(255, 213, 79, .3);
+    color: #FFD54F;
+}
+.btn-recibo:hover {
+    background: rgba(255, 213, 79, .28);
+    color: #fff;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BOTÓN MODO OSCURO/CLARO  (todas las páginas del panel)
+   ────────────────────────────────────────────────────────────── */
+.btn-modo {
+    position: fixed;
+    bottom: 1.4rem;
+    right: 1.4rem;
+    z-index: 9000;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .18);
+    color: #FFD54F;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+    box-shadow: 0 4px 18px rgba(0,0,0,.35);
+}
+.btn-modo:hover {
+    background: rgba(255, 255, 255, .16);
+    transform: scale(1.1);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   MODO CLARO  (light-mode)
+   ────────────────────────────────────────────────────────────── */
+body.light-mode {
+    background: #eef2f7 !important;
+    color: #1a2540 !important;
+}
+body.light-mode .sidebar {
+    background: linear-gradient(180deg, #1565C0 0%, #0d3c82 100%) !important;
+}
+body.light-mode .main-content,
+body.light-mode .panel-main {
+    background: #eef2f7 !important;
+}
+body.light-mode .stat-card {
+    background: #fff !important;
+    color: #1a2540 !important;
+    border-color: rgba(21, 101, 192, .18) !important;
+}
+body.light-mode .table-panel {
+    background: #fff !important;
+    color: #1a2540 !important;
+}
+body.light-mode .table-panel th {
+    background: rgba(21, 101, 192, .08) !important;
+    color: #1a2540 !important;
+}
+body.light-mode .table-panel td {
+    color: #1a2540 !important;
+    border-color: rgba(21, 101, 192, .1) !important;
+}
+body.light-mode .table-panel tr:hover {
+    background: rgba(21, 101, 192, .05) !important;
+}
+body.light-mode .page-title,
+body.light-mode .page-subtitle {
+    color: #1a2540 !important;
+}
+body.light-mode .btn-modo {
+    background: rgba(21, 101, 192, .12);
+    border-color: rgba(21, 101, 192, .25);
+    color: #1565C0;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BIENVENIDA ESTUDIANTE  (libro.jsp)
+   ────────────────────────────────────────────────────────────── */
+.bienvenida-est {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(21,101,192,.18), rgba(66,165,245,.08));
+    border: 1px solid rgba(66, 165, 245, .22);
+    border-radius: 14px;
+    padding: .9rem 1.3rem;
+    margin-bottom: 1.4rem;
+    animation: slideInBienvenida .4s ease;
+}
+@keyframes slideInBienvenida {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to   {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.bienvenida-est .wave {
+    font-size: 1.7rem;
+    animation: waveAnim 1.6s ease-in-out infinite;
+    transform-origin: 70% 70%;
+    display: inline-block;
+}
+@keyframes waveAnim {
+    0%,100% {
+        transform: rotate(0deg);
+    }
+    20%      {
+        transform: rotate(15deg);
+    }
+    40%      {
+        transform: rotate(-8deg);
+    }
+    60%      {
+        transform: rotate(12deg);
+    }
+    80%      {
+        transform: rotate(-5deg);
+    }
+}
+.bienvenida-est .txt {
+    font-size: .9rem;
+    color: rgba(255, 255, 255, .85);
+    line-height: 1.5;
+}
+body.light-mode .bienvenida-est .txt {
+    color: #1a2540;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   DASHBOARD  (DashboardServlet / dashboard.jsp)
+   ────────────────────────────────────────────────────────────── */
+.dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1.1rem;
+    margin-bottom: 2rem;
+}
+.dash-kpi {
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid rgba(66, 165, 245, .15);
+    border-radius: 16px;
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform .2s, box-shadow .2s;
+}
+.dash-kpi:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,.22);
+}
+.dash-kpi-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+.dash-kpi-val {
+    font-size: 1.8rem;
+    font-weight: 900;
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.dash-kpi-lbl {
+    font-size: .78rem;
+    color: rgba(255,255,255,.5);
+    margin-top: .2rem;
+}
+.dash-chart-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(66,165,245,.13);
+    border-radius: 16px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.4rem;
+}
+.dash-chart-title {
+    font-size: .88rem;
+    font-weight: 700;
+    color: rgba(255,255,255,.7);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+/* Barras de progreso inline para el dashboard */
+.dash-bar-row {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: .65rem;
+    font-size: .83rem;
+}
+.dash-bar-label {
+    width: 110px;
+    flex-shrink: 0;
+    color: rgba(255,255,255,.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.dash-bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,.07);
+    border-radius: 50px;
+    overflow: hidden;
+}
+.dash-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--azul-primario), var(--azul-claro));
+    transition: width .6s ease;
+}
+.dash-bar-num {
+    width: 36px;
+    text-align: right;
+    color: rgba(255,255,255,.5);
+    font-size: .78rem;
+}
+body.light-mode .dash-kpi,
+body.light-mode .dash-chart-card {
+    background: #fff;
+    border-color: rgba(21,101,192,.15);
+}
+body.light-mode .dash-kpi-lbl,
+body.light-mode .dash-bar-label,
+body.light-mode .dash-chart-title,
+body.light-mode .dash-bar-num {
+    color: #555;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   PÁGINA DE REGISTRO  (registro.jsp)
+   ────────────────────────────────────────────────────────────── */
+.registro-card {
+    background: rgba(13, 40, 85, .92);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(66,165,245,.2);
+    border-radius: 24px;
+    padding: 2.4rem 2.2rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 24px 64px rgba(0,0,0,.45);
+}
+.registro-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: .25rem;
+    text-align: center;
+}
+.registro-subtitle {
+    font-size: .85rem;
+    color: rgba(255,255,255,.45);
+    text-align: center;
+    margin-bottom: 1.6rem;
+}
+.form-group-reg {
+    margin-bottom: 1rem;
+}
+.form-group-reg label {
+    display: block;
+    font-size: .82rem;
+    color: rgba(255,255,255,.6);
+    margin-bottom: .35rem;
+}
+.form-group-reg input {
+    width: 100%;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(66,165,245,.22);
+    border-radius: 10px;
+    padding: .65rem .9rem;
+    color: #fff;
+    font-size: .9rem;
+    transition: border .2s;
+    box-sizing: border-box;
+}
+.form-group-reg input:focus {
+    outline: none;
+    border-color: rgba(66,165,245,.6);
+    background: rgba(255,255,255,.09);
+}
+.form-group-reg input::placeholder {
+    color: rgba(255,255,255,.25);
+}
+.btn-registro {
+    width: 100%;
+    padding: .75rem;
+    background: linear-gradient(135deg, var(--azul-primario), var(--azul-claro));
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: .95rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: .5rem;
+    transition: opacity .2s, transform .15s;
+}
+.btn-registro:hover {
+    opacity: .9;
+    transform: translateY(-1px);
+}
+.registro-footer {
+    text-align: center;
+    margin-top: 1.2rem;
+    font-size: .83rem;
+    color: rgba(255,255,255,.4);
+}
+.registro-footer a {
+    color: #42A5F5;
+    text-decoration: none;
+}
+.registro-footer a:hover {
+    text-decoration: underline;
+}
+.alerta-reg {
+    border-radius: 10px;
+    padding: .65rem 1rem;
+    font-size: .85rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.alerta-reg-error {
+    background: rgba(239,83,80,.12);
+    border: 1px solid rgba(239,83,80,.3);
+    color: #EF5350;
+}
+.alerta-reg-ok {
+    background: rgba(76,175,80,.12);
+    border: 1px solid rgba(76,175,80,.3);
+    color: #66BB6A;
+}
