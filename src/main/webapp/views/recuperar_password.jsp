@@ -43,7 +43,7 @@
       padding: 1.5rem;
     }
 
-    /* ── Card ── */
+    /* -- Card -- */
     .rec-wrap   { width: 100%; max-width: 420px; }
     .auth-card  {
       background: var(--white);
@@ -54,7 +54,7 @@
     }
     @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
-    /* ── Progress steps ── */
+    /* -- Progress steps -- */
     .steps-bar {
       display: flex;
       align-items: center;
@@ -98,7 +98,7 @@
     }
     .step-line.done { background: var(--green-mid); }
 
-    /* ── Header area ── */
+    /* -- Header area -- */
     .rec-icon {
       width: 60px; height: 60px;
       border-radius: 50%;
@@ -112,7 +112,7 @@
     .rec-sub   { font-size: .8rem; color: var(--text-lt); text-align: center; margin-bottom: 1.4rem; line-height: 1.5; }
     .rec-sub strong { color: var(--green-dark); }
 
-    /* ── Alerts ── */
+    /* -- Alerts -- */
     .alert-err {
       display: flex; align-items: flex-start; gap: .55rem;
       background: #fff0f0; border: 1px solid #ffc4c4;
@@ -129,7 +129,7 @@
     }
     .alert-err i, .alert-info i { margin-top: .05rem; flex-shrink: 0; font-size: .88rem; }
 
-    /* ── Field ── */
+    /* -- Field -- */
     .field-group { margin-bottom: 1rem; }
     .field-group label {
       display: block; font-size: .78rem; font-weight: 600;
@@ -174,7 +174,7 @@
     }
     .strength-label { font-size: .68rem; color: var(--text-lt); margin-top: .25rem; text-align: right; }
 
-    /* ── OTP boxes ── */
+    /* -- OTP boxes -- */
     .otp-grid {
       display: flex;
       justify-content: center;
@@ -202,7 +202,7 @@
     /* Hidden real field for form submit */
     #codigoHidden { display: none; }
 
-    /* ── Timer / reenviar ── */
+    /* -- Timer / reenviar -- */
     .timer-wrap { text-align: center; margin-top: -.5rem; margin-bottom: 1.1rem; }
     .timer-text  { font-size: .78rem; color: var(--text-lt); }
     .timer-num   { font-weight: 800; color: var(--green-dark); }
@@ -212,7 +212,7 @@
       text-decoration: underline; display: none;
     }
 
-    /* ── Buttons ── */
+    /* -- Buttons -- */
     .btn-main {
       width: 100%;
       padding: .8rem;
@@ -242,7 +242,7 @@
     }
     .btn-back:hover { background: #d4ece2; color: var(--green-dark); }
 
-    /* ── Footer ── */
+    /* -- Footer -- */
     .rec-footer {
       text-align: center; margin-top: 1.3rem;
       font-size: .76rem; color: var(--text-lt);
@@ -250,7 +250,7 @@
     .rec-footer a { color: var(--green-dark); font-weight: 700; text-decoration: none; }
     .rec-footer a:hover { text-decoration: underline; }
 
-    /* ── Success state ── */
+    /* -- Success state -- */
     .success-anim {
       text-align: center; padding: 1.5rem 0 .5rem;
       animation: fadeUp .4s ease both;
@@ -271,7 +271,7 @@
 <div class="rec-wrap">
   <div class="auth-card">
 
-    <%-- ── Progress steps ── --%>
+    <%-- -- Progress steps -- --%>
     <div class="steps-bar">
       <div class="step ${paso == 'solicitar' ? 'active' : 'done'}">
         <div class="step-circle">
@@ -303,9 +303,9 @@
       </div>
     </div>
 
-    <%-- ════════════════════════════════════════ --%>
+    <%-- ======================================== --%>
     <%-- PASO 1 — Solicitar correo               --%>
-    <%-- ════════════════════════════════════════ --%>
+    <%-- ======================================== --%>
     <c:if test="${paso == 'solicitar'}">
 
       <div class="rec-icon"><i class="fas fa-lock-open"></i></div>
@@ -341,9 +341,9 @@
 
     </c:if>
 
-    <%-- ════════════════════════════════════════ --%>
-    <%-- PASO 2 — Verificar código OTP           --%>
-    <%-- ════════════════════════════════════════ --%>
+    <%-- ======================================== --%>
+    <%-- PASO 2 — Verificar codigo OTP           --%>
+    <%-- ======================================== --%>
     <c:if test="${paso == 'verificar'}">
 
       <div class="rec-icon"><i class="fas fa-shield-alt"></i></div>
@@ -398,9 +398,9 @@
 
     </c:if>
 
-    <%-- ════════════════════════════════════════ --%>
-    <%-- PASO 3 — Nueva contraseña               --%>
-    <%-- ════════════════════════════════════════ --%>
+    <%-- ======================================== --%>
+    <%-- PASO 3 — Nueva contrasena               --%>
+    <%-- ======================================== --%>
     <c:if test="${paso == 'nueva'}">
 
       <div class="rec-icon"><i class="fas fa-key"></i></div>
@@ -466,7 +466,14 @@
 </div>
 
 <script>
-// ── OTP Boxes ─────────────────────────────────────────────────────────────
+// -- Constantes de mensajes (antes usaban variables indefinidas) --
+const MSG_STRENGTH = ['Muy debil', 'Debil', 'Regular', 'Fuerte'];
+const MSG_PWD_MATCH = 'Las contrasenas coinciden';
+const MSG_PWD_NO_MATCH = 'Las contrasenas no coinciden';
+const MSG_PWD_MIN = 'La contrasena debe tener al menos 6 caracteres';
+const MSG_PWD_NOMATCH2 = 'Las contrasenas no coinciden. Por favor verifica.';
+
+// -- OTP Boxes --------------------------------------------------------------
 (function() {
   const boxes   = Array.from(document.querySelectorAll('.otp-box'));
   const hidden  = document.getElementById('codigoHidden');
@@ -510,7 +517,7 @@
   if (boxes[0]) boxes[0].focus();
 })();
 
-// ── Timer ─────────────────────────────────────────────────────────────────
+// -- Timer ------------------------------------------------------------------
 (function() {
   const numEl   = document.getElementById('timerNum');
   const textEl  = document.getElementById('timerText');
@@ -535,7 +542,7 @@ function reenviarCodigo() {
   window.location.href = '${pageContext.request.contextPath}/recuperar?paso=solicitar';
 }
 
-// ── Password strength ─────────────────────────────────────────────────────
+// -- Password strength ------------------------------------------------------
 function updateStrength(val) {
   const segs  = ['s1','s2','s3','s4'].map(id => document.getElementById(id));
   const label = document.getElementById('strengthLabel');
@@ -548,9 +555,8 @@ function updateStrength(val) {
   if (/[0-9]/.test(val) && /[\W_]/.test(val)) score++;
 
   const colors  = ['#ef4444','#f97316','#eab308','#22c55e'];
-  const labels  = MSG_STRENGTH;
   segs.forEach((s, i) => s.style.background = i < score ? colors[score - 1] : 'var(--border)');
-  label.textContent  = val.length ? labels[score - 1] || labels[0] : '';
+  label.textContent  = val.length ? MSG_STRENGTH[score - 1] || MSG_STRENGTH[0] : '';
   label.style.color  = score > 0 ? colors[score - 1] : 'var(--text-lt)';
 }
 
@@ -569,7 +575,7 @@ function checkMatch() {
   }
 }
 
-// ── Toggle password ───────────────────────────────────────────────────────
+// -- Toggle password --------------------------------------------------------
 function togglePass(inputId, iconId) {
   const inp = document.getElementById(inputId);
   const ico = document.getElementById(iconId);
@@ -578,7 +584,7 @@ function togglePass(inputId, iconId) {
   else { inp.type = 'password'; ico.className = 'fas fa-eye'; }
 }
 
-// ── Form validation ───────────────────────────────────────────────────────
+// -- Form validation --------------------------------------------------------
 const frmNueva = document.getElementById('frmNueva');
 if (frmNueva) {
   frmNueva.addEventListener('submit', function(e) {
@@ -596,7 +602,7 @@ if (frmNueva) {
   });
 }
 
-// ── Loading spinner on submit ─────────────────────────────────────────────
+// -- Loading spinner on submit ----------------------------------------------
 document.querySelectorAll('form').forEach(form => {
   form.addEventListener('submit', function() {
     const btn = this.querySelector('button[type=submit]');
