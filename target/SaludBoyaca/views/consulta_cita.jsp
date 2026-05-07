@@ -889,8 +889,8 @@
                                     <span class="badge-estado estado-${cita.estado}">
                                         ${cita.estado}
                                     </span>
-                                    <a href="${pageContext.request.contextPath}/consulta_cita?accion=pdf&id=${cita.idCita}"
-                                       class="btn-pdf-cita" title="Descargar comprobante PDF">
+                                    <a href="#" onclick="abrirComprobante('${pageContext.request.contextPath}/consulta_cita?accion=pdf&id=${cita.idCita}'); return false;"
+                                       class="btn-pdf-cita" title="Ver comprobante PDF">
                                         <i class="fas fa-file-pdf"></i> <fmt:message key="consulta.voucher"/>
                                     </a>
                                     <span class="cita-id">Cita #${cita.idCita}</span>
@@ -943,12 +943,51 @@
         <a href="${pageContext.request.contextPath}/#especialidades"><fmt:message key="consulta.specialties"/></a>
     </div>
 </footer>
+<!-- ═══ MODAL COMPROBANTE PDF ═══ -->
+<div class="modal fade" id="modalComprobante" tabindex="-1" aria-labelledby="modalComprobanteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" style="max-width:900px;">
+        <div class="modal-content" style="border:none; border-radius:14px; overflow:hidden;">
+            <div class="modal-header" style="background:linear-gradient(135deg,var(--green-dark),var(--green)); color:#fff; border:none; padding:1rem 1.4rem;">
+                <h5 class="modal-title" id="modalComprobanteLabel" style="font-weight:600; font-size:1rem;">
+                    <i class="fas fa-file-pdf me-2"></i> Comprobante de Cita
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body p-0" style="height:75vh;">
+                <iframe id="iframeComprobante" src="" style="width:100%; height:100%; border:none;" title="Comprobante PDF"></iframe>
+            </div>
+            <div class="modal-footer" style="border:none; background:var(--gray-bg); padding:.8rem 1.4rem; justify-content:space-between;">
+                <a id="linkDescarga" href="#" download style="color:var(--green-dark); font-size:.9rem; text-decoration:none;">
+                    <i class="fas fa-download me-1"></i> Descargar PDF
+                </a>
+                <button type="button" class="btn btn-sm" data-bs-dismiss="modal"
+                        style="background:var(--green); color:#fff; border:none; border-radius:8px; padding:.45rem 1.2rem; font-weight:500;">
+                    <i class="fas fa-arrow-left me-1"></i> Volver a consulta
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     /* Solo permitir dígitos en el campo documento */
     document.getElementById('documento').addEventListener('input', function () {
         this.value = this.value.replace(/\D/g, '');
+    });
+
+    /* Abrir comprobante en modal */
+    function abrirComprobante(url) {
+        document.getElementById('iframeComprobante').src = url;
+        document.getElementById('linkDescarga').href = url;
+        var modal = new bootstrap.Modal(document.getElementById('modalComprobante'));
+        modal.show();
+    }
+
+    /* Limpiar iframe al cerrar para evitar que siga cargando */
+    document.getElementById('modalComprobante').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('iframeComprobante').src = '';
     });
 </script>
 </body>
