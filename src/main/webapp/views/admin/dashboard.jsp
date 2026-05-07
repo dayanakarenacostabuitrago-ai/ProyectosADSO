@@ -296,6 +296,13 @@
         <div class="db-col-full">
           <div class="db-card">
             <div class="db-card-title">${msg["admin.chart.schedule.by.doc"]}</div>
+            <div style="margin-bottom:.8rem;padding-bottom:.6rem;border-bottom:2px solid #e2e8f0;">
+              <h5 style="margin:0;font-size:.95rem;font-weight:700;color:#1a2e26;display:flex;align-items:center;gap:.4rem;">
+                <i class="fas fa-calendar-alt" style="color:#6a9e8a;"></i>
+                Horarios M&eacute;dicos
+                <span style="font-size:.72rem;font-weight:500;color:#64748b;background:#f1f5f9;padding:.15rem .5rem;border-radius:50px;margin-left:.3rem;">Selecciona un m&eacute;dico</span>
+              </h5>
+            </div>
             <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;" id="medico-tabs"></div>
             <div id="horario-panel">
               <p style="color:#64748b;font-size:.8rem;text-align:center;padding:1rem;">${msg["admin.schedule.select.doctor"]}</p>

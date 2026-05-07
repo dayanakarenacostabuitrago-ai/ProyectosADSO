@@ -11,6 +11,33 @@ import java.util.*;
 
 public class ConsultaCitaDAO {
 
+    public Cita buscarPorIdCompleto(int idCita) throws Exception {
+
+        String sql = "SELECT "
+                + "c.\"idCita\", c.\"fechaCita\", c.\"horaCita\", c.estado, c.motivo, c.observaciones, "
+                + "p.nombres  AS pacienteNombre, p.apellidos AS pacienteApellido, p.documento, "
+                + "u.nombres  AS medicoNombre,   u.apellidos AS medicoApellido, "
+                + "e.nombre   AS especialidad "
+                + "FROM citas c "
+                + "INNER JOIN pacientes p      ON c.\"idPaciente\"    = p.\"idPaciente\" "
+                + "INNER JOIN usuarios u       ON c.\"idUsuario\"     = u.\"idUsuario\" "
+                + "INNER JOIN especialidades e ON c.\"idEspecialidad\" = e.\"idEspecialidad\" "
+                + "WHERE c.\"idCita\" = ?";
+
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idCita);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapear(rs);
+                }
+            }
+        }
+        return null;
+    }
+
     public List<Cita> consultarPorDocumento(String documento) throws Exception {
 
         List<Cita> lista = new ArrayList<>();

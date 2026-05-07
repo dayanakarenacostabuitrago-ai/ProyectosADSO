@@ -4,6 +4,7 @@ import co.sena.cimm.adso.saludboyaca.dao.ConsultaCitaDAO;
 import co.sena.cimm.adso.saludboyaca.dao.PacienteDAO;
 import co.sena.cimm.adso.saludboyaca.dto.Cita;
 import co.sena.cimm.adso.saludboyaca.dto.Paciente;
+import co.sena.cimm.adso.saludboyaca.util.PDFGenerator;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
@@ -29,10 +30,40 @@ public class ConsultaCitaServlet extends HttpServlet {
         pacienteDAO = new PacienteDAO();
     }
 
-    // ── GET: mostrar formulario limpio ───────────────────────────────
+    // ── GET: mostrar formulario limpio O generar PDF comprobante ─────
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+
+        String accion = req.getParameter("accion");
+
+        if ("pdf".equals(accion)) {
+            String idParam = req.getParameter("id");
+            if (idParam == null || idParam.trim().isEmpty()) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de cita no especificado.");
+                return;
+            }
+            try {
+                int idCita = Integer.parseInt(idParam.trim());
+                Cita cita = dao.buscarPorIdCompleto(idCita);
+                if (cita == null) {
+                    resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Cita no encontrada.");
+                    return;
+                }
+                resp.setContentType("application/pdf");
+                resp.setHeader("Content-Disposition",
+                        "inline; filename=\"comprobante_cita_" + idCita + ".pdf\"");
+                PDFGenerator.generarComprobante(cita, resp.getOutputStream());
+            } catch (NumberFormatException e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de cita invalido.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                        "Error al generar el comprobante.");
+            }
+            return;
+        }
+
         req.getRequestDispatcher("/views/consulta_cita.jsp").forward(req, resp);
     }
 
