@@ -5,7 +5,6 @@ co\sena\cimm\adso\saludboyaca\dao\CitaDAO.class
 co\sena\cimm\adso\saludboyaca\servlet\HorarioServlet.class
 co\sena\cimm\adso\saludboyaca\dao\OTPTokenDAO.class
 co\sena\cimm\adso\saludboyaca\util\AuthFilter.class
-co\sena\cimm\adso\saludboyaca\util\OTPService$1.class
 co\sena\cimm\adso\saludboyaca\dao\ConsultaCitaDAO.class
 co\sena\cimm\adso\saludboyaca\util\CaptchaGenerator.class
 co\sena\cimm\adso\saludboyaca\servlet\CitaServlet.class
@@ -13,7 +12,6 @@ co\sena\cimm\adso\saludboyaca\dto\Especialidad.class
 co\sena\cimm\adso\saludboyaca\dao\UsuarioDAO.class
 co\sena\cimm\adso\saludboyaca\util\LocaleFilter.class
 co\sena\cimm\adso\saludboyaca\servlet\EspecialidadesServlet.class
-co\sena\cimm\adso\saludboyaca\servlet\LoginServlet$1.class
 co\sena\cimm\adso\saludboyaca\servlet\RecuperarPasswordServlet.class
 co\sena\cimm\adso\saludboyaca\servlet\LogoutServlet.class
 co\sena\cimm\adso\saludboyaca\util\PDFGenerator.class

@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Citas — SaludBoyacá</title>
+    <title>${msg["consulta.title"]} — SaludBoyacá</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -738,9 +738,9 @@
                 </div>
                 <h3><fmt:message key="consulta.not.found.title"/></h3>
                 <p>
-                    El número de documento <strong>${param.documento}</strong> no se encuentra registrado
-                    en nuestro sistema de pacientes. Si eres un paciente nuevo, te invitamos a
-                    acercarte a nuestras instalaciones para completar tu registro.
+                    <fmt:message key="consulta.not.registered.doc">
+                        <fmt:param><strong>${param.documento}</strong></fmt:param>
+                    </fmt:message>
                 </p>
                 <div class="state-contact-box">
                     <div class="sc-icon"><i class="fas fa-map-marker-alt"></i></div>
@@ -787,9 +787,7 @@
                     </div>
                     <h3><fmt:message key="consulta.no.appointments.title"/></h3>
                     <p>
-                        Hola <strong>${pacienteNombre}</strong>, en este momento no hay citas
-                        programadas asociadas a tu documento. Si necesitas agendar una consulta,
-                        comunícate con nosotros o acércate a recepción.
+                        ${msg["consulta.no.appointments.msg"]}
                     </p>
                     <div class="state-contact-box">
                         <div class="sc-icon"><i class="fas fa-phone-alt"></i></div>
@@ -800,7 +798,7 @@
                     </div>
                     <div style="margin-top:1.5rem; display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap;">
                         <a href="${pageContext.request.contextPath}/consulta_cita" class="btn-nueva-busqueda">
-                            <i class="fas fa-redo"></i> Nueva búsqueda
+                            <i class="fas fa-redo"></i> ${msg["consulta.new.search.btn"]}
                         </a>
                         <a href="${pageContext.request.contextPath}/" class="btn-volver">
                             <i class="fas fa-home"></i> Volver al inicio
@@ -865,7 +863,7 @@
         ${cita.especialidad}
     </div>
 
-    <h4>${not empty cita.motivo ? cita.motivo : 'Consulta médica'}</h4>
+    <h4>${not empty cita.motivo ? cita.motivo : msg['consulta.default.reason']}</h4>
 
     <div class="cita-detail-row">
 

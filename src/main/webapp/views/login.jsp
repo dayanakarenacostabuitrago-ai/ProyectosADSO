@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Acceso — SaludBoyacá</title>
+    <title>${msg["login.title"]} — SaludBoyacá</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -187,7 +187,7 @@
         box-shadow:0 6px 24px rgba(0,0,0,.22);z-index:9999;
         display:flex;align-items:center;gap:.55rem;
         animation:fadeUp .4s ease both;">
-        <i class="fas fa-check-circle"></i> ¡Contraseña actualizada! Inicia sesión con tu nueva clave.
+        <i class="fas fa-check-circle"></i> ${msg["login.password.updated"]}
       </div>
       <script>setTimeout(()=>{const t=document.getElementById('recToast');if(t)t.remove();},5000);</script>
     </c:if>
@@ -270,7 +270,7 @@
     <!-- OTP Section -->
     <div class="otp-section" id="otpSection">
       <div class="otp-section-title"><fmt:message key="otp.subtitle"/></div>
-      <div class="otp-section-sub" id="otpSubtitle">Enviado a tu móvil por Gmail</div>
+      <div class="otp-section-sub" id="otpSubtitle">${msg["login.otp.sent.mobile"]}</div>
 
       <div class="otp-boxes">
         <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp0" autocomplete="off">
@@ -291,7 +291,7 @@
       <form id="otpForm" action="${pageContext.request.contextPath}/otp?accion=validar" method="post">
         <input type="hidden" name="otpCodigo" id="otpHidden">
         <button type="button" class="btn-verify" id="btnVerify" onclick="submitOtp()">
-          Verificar código
+          <fmt:message key="login.verify.code"/>
         </button>
       </form>
     </div>
@@ -396,7 +396,7 @@ function submitOtp() {
     var code = getOtpValue();
     if (code.length < 6) {
         var el = document.getElementById('jsError');
-        document.getElementById('jsErrorMsg').textContent = 'Ingresa los 6 dígitos del código.';
+        document.getElementById('jsErrorMsg').textContent = MSG_ENTER_OTP;
         el.style.display = 'flex';
         return;
     }
@@ -417,7 +417,7 @@ function iniciarTimer() {
         el.textContent = m+':'+String(s).padStart(2,'0');
         bar.style.width = (timerSeconds/300*100)+'%';
         if (timerSeconds < 60) { el.classList.add('urgente'); bar.style.background='#E53E3E'; }
-        if (timerSeconds <= 0) { clearInterval(otpTimerInterval); btn.disabled=true; btn.textContent='Código expirado'; }
+        if (timerSeconds <= 0) { clearInterval(otpTimerInterval); btn.disabled=true; btn.textContent=MSG_OTP_EXPIRED; }
     }, 1000);
 }
 
@@ -427,7 +427,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
     if (!user || !pass) {
         e.preventDefault();
         var el = document.getElementById('jsError');
-        document.getElementById('jsErrorMsg').textContent = 'Completa usuario y contraseña.';
+        document.getElementById('jsErrorMsg').textContent = MSG_FILL_FIELDS;
         el.style.display = 'flex';
         return;
     }

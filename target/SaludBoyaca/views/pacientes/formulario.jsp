@@ -9,7 +9,7 @@
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1">
-                <title>${not empty paciente ? 'Editar' : 'Nuevo'} Paciente — SaludBoyacá</title>
+                <title>${not empty paciente ? msg["paciente.edit"] : msg["paciente.new"]} — SaludBoyacá</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
                 <style>
@@ -95,7 +95,7 @@
                                                 <input type="text" name="nombres" class="form-control" required
                                                     maxlength="100"
                                                     value="${not empty paciente ? paciente.nombres : ''}"
-                                                    placeholder="Ej: María Alejandra">
+                                                    placeholder="${msg['paciente.placeholder.nombres']}">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label"><fmt:message key="paciente.apellidos"/> <span
@@ -103,7 +103,7 @@
                                                 <input type="text" name="apellidos" class="form-control" required
                                                     maxlength="100"
                                                     value="${not empty paciente ? paciente.apellidos : ''}"
-                                                    placeholder="Ej: González Pérez">
+                                                    placeholder="${msg['paciente.placeholder.apellidos']}">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label"><fmt:message key="paciente.documento"/> <span
@@ -111,7 +111,7 @@
                                                 <input type="text" name="documento" class="form-control" required
                                                     maxlength="20"
                                                     value="${not empty paciente ? paciente.documento : ''}"
-                                                    placeholder="Cédula / Pasaporte / TI">
+                                                    placeholder="${msg['paciente.placeholder.documento']}">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label"><fmt:message key="paciente.birthdate"/> <span

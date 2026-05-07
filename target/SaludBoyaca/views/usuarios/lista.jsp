@@ -4,13 +4,16 @@
       <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
         <fmt:setLocale value="${not empty sessionScope.lang ? sessionScope.lang : 'es'}" />
         <fmt:setBundle basename="messages" />
+        <fmt:message key="usuario.activo"   var="activeLabel"/>
+        <fmt:message key="usuario.inactivo" var="inactiveLabel"/>
+        <fmt:message key="usuario.search.placeholder" var="searchPlaceholder"/>
         <!DOCTYPE html>
         <html lang="${not empty sessionScope.lang ? sessionScope.lang : 'es'}">
 
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>Gestión de Usuarios — SaludBoyacá</title>
+          <title><fmt:message key="usuario.manage"/> — SaludBoyacá</title>
           <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
           <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
           <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
@@ -485,12 +488,9 @@
                 <div id="toast" class="toast-success"
                   style="position:fixed;top:70px;right:1.2rem;z-index:9999;display:none;">
                   <c:choose>
-                    <c:when test="${param.msg == 'creado'}"><i class="fas fa-check-circle me-2"></i> Usuario creado
-                      correctamente</c:when>
-                    <c:when test="${param.msg == 'actualizado'}"><i class="fas fa-check-circle me-2"></i> Usuario
-                      actualizado</c:when>
-                    <c:when test="${param.msg == 'eliminado'}"><i class="fas fa-check-circle me-2"></i> Usuario
-                      eliminado</c:when>
+                    <c:when test="${param.msg == 'creado'}"><i class="fas fa-check-circle me-2"></i> <fmt:message key="usuario.created"/></c:when>
+                    <c:when test="${param.msg == 'actualizado'}"><i class="fas fa-check-circle me-2"></i> <fmt:message key="usuario.updated"/></c:when>
+                    <c:when test="${param.msg == 'eliminado'}"><i class="fas fa-check-circle me-2"></i> <fmt:message key="usuario.deleted"/></c:when>
                   </c:choose>
                 </div>
               </c:if>
@@ -498,11 +498,9 @@
                 <div id="toast" class="toast-error"
                   style="position:fixed;top:70px;right:1.2rem;z-index:9999;display:none;">
                   <i class="fas fa-exclamation-circle me-2"></i>
-                  <c:if test="${param.error == 'no_auto_eliminar'}">No puedes eliminarte a ti mismo</c:if>
-                  <c:if test="${param.error == 'fk_constraint'}">No se puede eliminar: el usuario tiene citas asociadas.
-                    Fue desactivado.</c:if>
-                  <c:if test="${param.error == 'error_general'}">Error interno al eliminar el usuario. Revisa los logs
-                    del servidor.</c:if>
+                  <c:if test="${param.error == 'no_auto_eliminar'}"><fmt:message key="usuario.error.self"/></c:if>
+                  <c:if test="${param.error == 'fk_constraint'}"><fmt:message key="usuario.error.fk"/></c:if>
+                  <c:if test="${param.error == 'error_general'}"><fmt:message key="usuario.error.general"/></c:if>
                 </div>
               </c:if>
 
@@ -511,14 +509,13 @@
                   <div class="page-hdr-left">
                     <div class="breadcrumb-bar">
                       <a href="${pageContext.request.contextPath}/dashboard">Dashboard</a>
-                      <span style="margin:0 .4rem;">›</span> Usuarios
+                      <span style="margin:0 .4rem;">›</span> <fmt:message key="usuario.title"/>
                     </div>
-                    <h5><i class="fas fa-users-cog" style="color:var(--g);margin-right:.5rem;"></i>Gestión de Usuarios
-                    </h5>
-                    <p>Administración completa del personal del sistema</p>
+                    <h5><i class="fas fa-users-cog" style="color:var(--g);margin-right:.5rem;"></i><fmt:message key="usuario.manage"/></h5>
+                    <p><fmt:message key="usuario.admin.description"/></p>
                   </div>
                   <a href="${pageContext.request.contextPath}/usuarios?accion=nuevo" class="btn-new">
-                    <i class="fas fa-plus"></i> Nuevo Usuario
+                    <i class="fas fa-plus"></i> <fmt:message key="usuario.new"/>
                   </a>
                 </div>
 
@@ -527,27 +524,27 @@
                     <div class="sbar-item">
                       <div class="sbar-icon" style="background:#f3ecff;color:#6e23c4;"><i class="fas fa-users"></i>
                       </div>
-                      <span id="stat-total">0</span> total
+                      <span id="stat-total">0</span> <fmt:message key="stat.patients"/>
                     </div>
                     <div class="sbar-item">
                       <div class="sbar-icon" style="background:#e0f4f4;color:#0c7e7e;"><i
                           class="fas fa-stethoscope"></i></div>
-                      <span id="stat-medico">0</span> médicos
+                      <span id="stat-medico">0</span> <fmt:message key="role.medico"/>
                     </div>
                     <div class="sbar-item">
                       <div class="sbar-icon" style="background:#fff8e8;color:#b77a00;"><i
                           class="fas fa-concierge-bell"></i></div>
-                      <span id="stat-rec">0</span> recepcionistas
+                      <span id="stat-rec">0</span> <fmt:message key="role.recepcionista"/>
                     </div>
                     <div class="sbar-item">
                       <div class="sbar-icon" style="background:#e8f0ff;color:#2353c4;"><i class="fas fa-user-nurse"></i>
                       </div>
-                      <span id="stat-enf">0</span> enfermeros
+                      <span id="stat-enf">0</span> <fmt:message key="role.enfermero"/>
                     </div>
                     <div class="sbar-item">
                       <div class="sbar-icon" style="background:#dcfce7;color:#166534;"><i class="fas fa-circle"></i>
                       </div>
-                      <span id="stat-activos">0</span> activos
+                      <span id="stat-activos">0</span> <fmt:message key="filter.active"/>
                     </div>
                   </div>
 
@@ -556,20 +553,20 @@
                       <div class="table-toolbar">
                         <div class="search-box">
                           <i class="fas fa-search"></i>
-                          <input type="text" id="searchInput" placeholder="Buscar por nombre, usuario, documento..."
+                          <input type="text" id="searchInput" placeholder="${searchPlaceholder}"
                             oninput="filtrar()">
                         </div>
                         <select class="filter-sel" id="filterRol" onchange="filtrar()">
-                          <option value="" selected>Todos los roles</option>
-                          <option value="MEDICO">Médico</option>
-                          <option value="RECEPCIONISTA">Recepcionista</option>
-                          <option value="ENFERMERO">Enfermero</option>
-                          <option value="ADMINISTRADOR">Administrador</option>
+                          <option value="" selected><fmt:message key="filter.all.roles"/></option>
+                          <option value="MEDICO"><fmt:message key="role.medico"/></option>
+                          <option value="RECEPCIONISTA"><fmt:message key="role.recepcionista"/></option>
+                          <option value="ENFERMERO"><fmt:message key="role.enfermero"/></option>
+                          <option value="ADMINISTRADOR"><fmt:message key="role.administrador"/></option>
                         </select>
                         <select class="filter-sel" id="filterEstado" onchange="filtrar()">
-                          <option value="">Todos</option>
-                          <option value="1">Activos</option>
-                          <option value="0">Inactivos</option>
+                          <option value=""><fmt:message key="filter.all"/></option>
+                          <option value="1"><fmt:message key="filter.active"/></option>
+                          <option value="0"><fmt:message key="filter.inactive"/></option>
                         </select>
                       </div>
 
@@ -577,12 +574,12 @@
                         <table class="usr-table" id="usrTable">
                           <thead>
                             <tr>
-                              <th>Usuario</th>
-                              <th>Documento</th>
-                              <th>Email</th>
-                              <th>Rol</th>
-                              <th>Estado</th>
-                              <th>Acciones</th>
+                              <th><fmt:message key="usuario.username"/></th>
+                              <th><fmt:message key="usuario.documento"/></th>
+                              <th><fmt:message key="usuario.email"/></th>
+                              <th><fmt:message key="usuario.rol"/></th>
+                              <th><fmt:message key="usuario.status.label"/></th>
+                              <th><fmt:message key="th.actions"/></th>
                             </tr>
                           </thead>
                           <tbody id="usrBody">
@@ -612,16 +609,16 @@
                                 <td>
                                   <span class="status-pill ${u.activo == 1 ? 'status-on' : 'status-off'}">
                                     <span class="dot ${u.activo == 1 ? 'dot-on' : 'dot-off'}"></span>
-                                    ${u.activo == 1 ? 'Activo' : 'Inactivo'}
+                                    ${u.activo == 1 ? activeLabel : inactiveLabel}
                                   </span>
                                 </td>
                                 <td>
                                   <div class="act-wrap">
                                     <a href="${pageContext.request.contextPath}/usuarios?accion=editar&id=${u.idUsuario}"
-                                      class="act-btn act-edit" title="Editar">
+                                      class="act-btn act-edit" title="<fmt:message key="btn.edit"/>">
                                       <i class="fas fa-pen"></i>
                                     </a>
-                                    <button class="act-btn act-delete" title="Eliminar"
+                                    <button class="act-btn act-delete" title="<fmt:message key="btn.delete"/>"
                                       onclick="confirmarEliminar(${u.idUsuario}, '${u.nombres} ${u.apellidos}')">
                                       <i class="fas fa-trash-alt"></i>
                                     </button>
@@ -637,10 +634,10 @@
                         <c:if test="${empty usuarios}">
                           <div class="empty-state">
                             <i class="fas fa-users-slash"></i>
-                            <p>No hay usuarios registrados</p>
+                            <p><fmt:message key="usuario.empty"/></p>
                             <a href="${pageContext.request.contextPath}/usuarios?accion=nuevo" class="btn-new"
                               style="margin-top:.5rem;">
-                              <i class="fas fa-plus"></i> Crear primer usuario
+                              <i class="fas fa-plus"></i> <fmt:message key="usuario.new.first"/>
                             </a>
                           </div>
                         </c:if>
@@ -665,21 +662,20 @@
                           <i class="fas fa-trash-alt"></i>
                         </div>
                         <div>
-                          <h6 style="font-weight:800;margin:0;font-size:.95rem;">Eliminar usuario</h6>
-                          <p style="margin:0;font-size:.75rem;color:var(--text-lt);">Esta acción no se puede deshacer
-                          </p>
+                          <h6 style="font-weight:800;margin:0;font-size:.95rem;"><fmt:message key="usuario.confirm.delete"/></h6>
+                          <p style="margin:0;font-size:.75rem;color:var(--text-lt);"><fmt:message key="modal.irreversible"/></p>
                         </div>
                       </div>
                     </div>
                     <div class="modal-body">
-                      ¿Estás seguro de que deseas eliminar a <strong id="deleteNombre"></strong>?
+                      <fmt:message key="modal.confirm.delete.msg"/> <strong id="deleteNombre"></strong>?
                     </div>
                     <div class="modal-footer" style="gap:.5rem;">
                       <button class="btn-cancel-del"
                         onclick="bootstrap.Modal.getInstance(document.getElementById('modalEliminar')).hide()">
-                        Cancelar
+                        <fmt:message key="btn.cancelar"/>
                       </button>
-                      <button id="deleteLink" class="btn-confirm-del" onclick="ejecutarEliminar()">Eliminar</button>
+                      <button id="deleteLink" class="btn-confirm-del" onclick="ejecutarEliminar()"><fmt:message key="btn.delete"/></button>
                     </div>
                   </div>
                 </div>

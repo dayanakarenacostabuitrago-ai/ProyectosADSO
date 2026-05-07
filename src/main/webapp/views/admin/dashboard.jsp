@@ -243,13 +243,13 @@
         </div>
         <div class="db-col-third">
           <div class="db-card">
-            <div class="db-card-title">🎯 Distribución de citas</div>
+            <div class="db-card-title">${msg["admin.chart.cita.dist"]}</div>
             <canvas id="pieChart2" height="150"></canvas>
           </div>
         </div>
         <div class="db-col-third">
           <div class="db-card">
-            <div class="db-card-title">📋 Indicadores rápidos</div>
+            <div class="db-card-title">${msg["admin.chart.quick.kpis"]}</div>
             <div class="hbar-item">
               <div class="hbar-hdr"><span class="hbar-lbl">Citas pendientes</span><span class="hbar-pct" id="pct-pend">0%</span></div>
               <div class="hbar-track"><div class="hbar-fill" id="pend-bar" style="width:0%"></div></div>
@@ -259,7 +259,7 @@
               <div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div>
             </div>
             <div class="hbar-item">
-              <div class="hbar-hdr"><span class="hbar-lbl">Médicos activos</span><span class="hbar-pct"><%= totalMedicos %></span></div>
+              <div class="hbar-hdr"><span class="hbar-lbl">${msg["stat.medicos.activos"]}</span><span class="hbar-pct"><%= totalMedicos %></span></div>
               <div class="hbar-track"><div class="hbar-fill" style="width:<%= Math.min(totalMedicos * 5, 100) %>%"></div></div>
             </div>
             <div style="margin-top:1.2rem;text-align:center;">
@@ -280,7 +280,7 @@
         </div>
         <div class="db-col-half">
           <div class="db-card">
-            <div class="db-card-title">👶 Distribución por edad de pacientes</div>
+            <div class="db-card-title">${msg["admin.chart.age.dist"]}</div>
             <div class="hbar-item"><div class="hbar-hdr"><span class="hbar-lbl">18 – 25</span><span class="hbar-pct">18.6%</span></div><div class="hbar-track"><div class="hbar-fill" style="width:18.6%"></div></div></div>
             <div class="hbar-item"><div class="hbar-hdr"><span class="hbar-lbl">26 – 35</span><span class="hbar-pct">40.9%</span></div><div class="hbar-track"><div class="hbar-fill" style="width:40.9%"></div></div></div>
             <div class="hbar-item"><div class="hbar-hdr"><span class="hbar-lbl">36 – 45</span><span class="hbar-pct">18.1%</span></div><div class="hbar-track"><div class="hbar-fill" style="width:18.1%;background:#6a9e8a"></div></div></div>
@@ -295,10 +295,10 @@
       <div class="db-row">
         <div class="db-col-full">
           <div class="db-card">
-            <div class="db-card-title">🗓️ Horarios por médico</div>
+            <div class="db-card-title">${msg["admin.chart.schedule.by.doc"]}</div>
             <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;" id="medico-tabs"></div>
             <div id="horario-panel">
-              <p style="color:#64748b;font-size:.8rem;text-align:center;padding:1rem;">Selecciona un médico para ver su horario</p>
+              <p style="color:#64748b;font-size:.8rem;text-align:center;padding:1rem;">${msg["admin.schedule.select.doctor"]}</p>
             </div>
           </div>
         </div>
@@ -411,11 +411,11 @@ new Chart(document.getElementById('pieChart2'),{
   const data = <%=horariosJson%>;
   const tabs = document.getElementById('medico-tabs');
   const panel = document.getElementById('horario-panel');
-  const dias = ['Lunes','Martes','Miércoles','Jueves','Viernes'];
+  const dias = MSG_DAYS;
   const G = '#2d5a47';
 
   if(!data.length){
-    tabs.innerHTML = '<p style="color:#64748b;font-size:.8rem;">No hay médicos registrados.</p>';
+    tabs.innerHTML = '<p style="color:#64748b;font-size:.8rem;">' + MSG_NO_DOCS + '</p>';
     return;
   }
 
@@ -424,7 +424,7 @@ new Chart(document.getElementById('pieChart2'),{
       panel.innerHTML = '<p style="color:#64748b;font-size:.8rem;text-align:center;padding:1rem;">'+med.nombre+' no tiene horarios registrados.</p>';
       return;
     }
-    let html = '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>Día</th><th>Hora inicio</th><th>Hora fin</th><th>Máx. citas</th></tr></thead><tbody>';
+    let html = '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>'+MSG_TH_DAY+'</th><th>'+MSG_TH_START+'</th><th>'+MSG_TH_END+'</th><th>'+MSG_TH_MAX+'</th></tr></thead><tbody>';
     med.horarios.forEach(function(h){
       html += '<tr><td><strong>'+h.dia+'</strong></td><td>'+h.inicio+'</td><td>'+h.fin+'</td><td><span class="badge-db badge-comp">'+h.max+'</span></td></tr>';
     });

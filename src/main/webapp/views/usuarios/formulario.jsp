@@ -3,12 +3,19 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <fmt:setLocale value="${not empty sessionScope.lang ? sessionScope.lang : 'es'}"/>
 <fmt:setBundle basename="messages"/>
+<fmt:message key="usuario.activo"    var="activeLabel"/>
+<fmt:message key="usuario.inactivo"  var="inactiveLabel"/>
+<fmt:message key="usuario.new"       var="createLabel"/>
+<fmt:message key="btn.guardar"       var="saveLabel"/>
+<fmt:message key="form.required.fields" var="msgRequired"/>
+<fmt:message key="form.pass.required"   var="msgPassRequired"/>
+
 <!DOCTYPE html>
 <html lang="${not empty sessionScope.lang ? sessionScope.lang : 'es'}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${empty usuarioEditar ? 'Nuevo Usuario' : 'Editar Usuario'} — SaludBoyacá</title>
+  <title>${empty usuarioEditar ? msg["usuario.new"] : msg["usuario.edit"]} — SaludBoyacá</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -157,7 +164,7 @@
         <div class="breadcrumb-bar">
           <a href="${pageContext.request.contextPath}/dashboard">Dashboard</a>
           <span style="margin:0 .4rem;">›</span>
-          <a href="${pageContext.request.contextPath}/usuarios">Usuarios</a>
+          <a href="${pageContext.request.contextPath}/usuarios"><fmt:message key="usuario.title"/></a>
           <span style="margin:0 .4rem;">›</span>
           <span>${empty usuarioEditar ? 'Nuevo' : 'Editar'}</span>
         </div>
@@ -185,31 +192,31 @@
         <div class="form-section-hdr">
           <div class="sec-icon"><i class="fas fa-id-card"></i></div>
           <div>
-            <h6>Datos personales</h6>
-            <p>Información de identificación del usuario</p>
+            <h6><fmt:message key="usuario.personal.data"/></h6>
+            <p><fmt:message key="usuario.id.info"/></p>
           </div>
         </div>
         <div class="form-body">
           <div class="form-row">
             <div class="fld">
-              <label>Nombres <span class="req">*</span></label>
-              <input type="text" name="nombres" required placeholder="Ej: Juan Pablo"
+              <label><fmt:message key="usuario.nombres.label"/> <span class="req">*</span></label>
+              <input type="text" name="nombres" required placeholder="Ej: Juan"
                      value="${not empty usuarioEditar ? usuarioEditar.nombres : ''}">
             </div>
             <div class="fld">
-              <label>Apellidos <span class="req">*</span></label>
-              <input type="text" name="apellidos" required placeholder="Ej: Gómez Rojas"
+              <label><fmt:message key="usuario.apellidos.label"/> <span class="req">*</span></label>
+              <input type="text" name="apellidos" required placeholder="${msg['paciente.placeholder.apellidos']}"
                      value="${not empty usuarioEditar ? usuarioEditar.apellidos : ''}">
             </div>
           </div>
           <div class="form-row">
             <div class="fld">
-              <label>Documento <span class="req">*</span></label>
-              <input type="text" name="documento" required placeholder="Cédula o NIT"
+              <label><fmt:message key="usuario.documento"/> <span class="req">*</span></label>
+              <input type="text" name="documento" required placeholder="<fmt:message key="usuario.doc.placeholder"/>"
                      value="${not empty usuarioEditar ? usuarioEditar.documento : ''}">
             </div>
             <div class="fld">
-              <label>Correo electrónico <span class="req">*</span></label>
+              <label><fmt:message key="usuario.email.label"/> <span class="req">*</span></label>
               <input type="email" name="email" required placeholder="correo@ejemplo.com"
                      value="${not empty usuarioEditar ? usuarioEditar.email : ''}">
             </div>
@@ -222,37 +229,37 @@
         <div class="form-section-hdr">
           <div class="sec-icon"><i class="fas fa-key"></i></div>
           <div>
-            <h6>Acceso al sistema</h6>
-            <p>Credenciales de inicio de sesión</p>
+            <h6><fmt:message key="usuario.access.section"/></h6>
+            <p><fmt:message key="usuario.credentials.desc"/></p>
           </div>
         </div>
         <div class="form-body">
           <div class="form-row">
             <div class="fld">
-              <label>Nombre de usuario <span class="req">*</span></label>
+              <label><fmt:message key="usuario.username.label"/> <span class="req">*</span></label>
               <input type="text" name="userName" required placeholder="Ej: jgomez"
                      value="${not empty usuarioEditar ? usuarioEditar.userName : ''}">
             </div>
             <div class="fld">
               <label>
-                Contraseña
+                <fmt:message key="usuario.password"/>
                 <c:if test="${empty usuarioEditar}"><span class="req">*</span></c:if>
               </label>
               <div class="pass-wrap">
                 <input type="password" name="password" id="passField"
-                       placeholder="${empty usuarioEditar ? 'Contraseña segura' : 'Dejar vacío para no cambiar'}">
+                       placeholder="<fmt:message key="${empty usuarioEditar ? 'usuario.pass.placeholder.new' : 'usuario.pass.placeholder.edit'}"/>">
                 <button type="button" class="pass-toggle" onclick="togglePass()">
                   <i class="fas fa-eye" id="eyeIcon"></i>
                 </button>
               </div>
               <c:if test="${not empty usuarioEditar}">
-                <div class="hint"><i class="fas fa-info-circle"></i> Deja en blanco para mantener la contraseña actual</div>
+                <div class="hint"><i class="fas fa-info-circle"></i> <fmt:message key="usuario.pass.hint"/></div>
               </c:if>
             </div>
           </div>
           <div class="form-row">
             <div class="fld">
-              <label>Idioma preferido</label>
+              <label><fmt:message key="usuario.lang.label"/></label>
               <select name="langPreferido">
                 <option value="es" ${(empty usuarioEditar || usuarioEditar.langPreferido == 'es') ? 'selected' : ''}>🇨🇴 Español</option>
                 <option value="en" ${not empty usuarioEditar && usuarioEditar.langPreferido == 'en' ? 'selected' : ''}>🇺🇸 English</option>
@@ -260,7 +267,7 @@
               </select>
             </div>
             <div class="fld">
-              <label>Estado</label>
+              <label><fmt:message key="usuario.status.label"/></label>
               <div class="switch-wrap" style="margin-top:.6rem;">
                 <label class="switch">
                   <input type="checkbox" name="activo" value="1" id="activoSwitch"
@@ -268,7 +275,7 @@
                   <span class="slider"></span>
                 </label>
                 <span class="switch-label" id="activoLabel">
-                  ${(empty usuarioEditar || usuarioEditar.activo == 1) ? 'Usuario activo' : 'Usuario inactivo'}
+                  ${(empty usuarioEditar || usuarioEditar.activo == 1) ? activeLabel : inactiveLabel}
                 </span>
               </div>
             </div>
@@ -281,8 +288,8 @@
         <div class="form-section-hdr">
           <div class="sec-icon"><i class="fas fa-user-tag"></i></div>
           <div>
-            <h6>Rol del sistema</h6>
-            <p>Define los permisos del usuario</p>
+            <h6><fmt:message key="usuario.role.section"/></h6>
+            <p><fmt:message key="usuario.role.desc"/></p>
           </div>
         </div>
         <div class="form-body">
@@ -307,9 +314,9 @@
           <%-- Especialidad (solo para MÉDICO) --%>
           <div id="espSection" style="margin-top:1rem;display:none;">
             <div class="fld">
-              <label>Especialidad médica</label>
+              <label><fmt:message key="usuario.specialty.label"/></label>
               <select name="idEspecialidad" id="idEspecialidad">
-                <option value="0">— Seleccionar especialidad —</option>
+                <option value="0"><fmt:message key="usuario.specialty.select"/></option>
                 <c:forEach var="esp" items="${especialidades}">
                   <option value="${esp.idEspecialidad}"
                     ${not empty usuarioEditar && usuarioEditar.idEspecialidad == esp.idEspecialidad ? 'selected' : ''}>
@@ -317,7 +324,7 @@
                   </option>
                 </c:forEach>
               </select>
-              <div class="hint">Requerida para médicos</div>
+              <div class="hint"><fmt:message key="usuario.specialty.hint"/></div>
             </div>
           </div>
 
@@ -325,7 +332,7 @@
           <div id="adminInfo" style="margin-top:1rem;display:none;">
             <div style="background:#f3ecff;border:1px solid #d8caff;border-radius:10px;padding:.75rem 1rem;font-size:.8rem;color:#6e23c4;">
               <i class="fas fa-info-circle me-1"></i>
-              El <strong>Administrador</strong> tiene acceso total al sistema. La especialidad no aplica para este rol.
+              <fmt:message key="usuario.admin.info"/>
             </div>
           </div>
         </div>
@@ -333,11 +340,11 @@
 
       <div class="form-actions">
         <a href="${pageContext.request.contextPath}/usuarios" class="btn-cancel">
-          <i class="fas fa-times"></i> Cancelar
+          <i class="fas fa-times"></i> <fmt:message key="btn.cancelar"/>
         </a>
         <button type="submit" class="btn-save">
           <i class="fas ${empty usuarioEditar ? 'fa-user-plus' : 'fa-save'}"></i>
-          ${empty usuarioEditar ? 'Crear usuario' : 'Guardar cambios'}
+          ${empty usuarioEditar ? createLabel : saveLabel}
         </button>
       </div>
     </form>
@@ -369,7 +376,7 @@ function togglePass() {
 
 // Toggle label activo
 document.getElementById('activoSwitch').addEventListener('change', function() {
-  document.getElementById('activoLabel').textContent = this.checked ? 'Usuario activo' : 'Usuario inactivo';
+  document.getElementById('activoLabel').textContent = this.checked ? '${activeLabel}' : '${inactiveLabel}';
 });
 
 // Form validation
@@ -383,10 +390,10 @@ document.getElementById('userForm').addEventListener('submit', function(e) {
   const pass     = document.getElementById('passField').value;
 
   if (!nombres || !apellidos || !doc || !email || !uname) {
-    e.preventDefault(); alert('Por favor completa todos los campos obligatorios.'); return;
+    e.preventDefault(); alert(msgRequired); return;
   }
   if (isNew && !pass) {
-    e.preventDefault(); alert('La contraseña es requerida para nuevos usuarios.'); return;
+    e.preventDefault(); alert(msgPassRequired); return;
   }
 });
 </script>

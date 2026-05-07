@@ -4,11 +4,11 @@
 <fmt:setLocale value="${not empty sessionScope.lang ? sessionScope.lang : 'es'}"/>
 <fmt:setBundle basename="messages"/>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="${not empty sessionScope.lang ? sessionScope.lang : 'es'}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Recuperar contraseña — SaludBoyacá</title>
+  <title><fmt:message key="rec.page.title"/></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -280,7 +280,7 @@
             <c:otherwise>1</c:otherwise>
           </c:choose>
         </div>
-        <div class="step-label">Correo</div>
+        <div class="step-label"><fmt:message key="rec.step.email"/></div>
       </div>
 
       <div class="step-line ${paso != 'solicitar' ? 'done' : ''}"></div>
@@ -292,14 +292,14 @@
             <c:otherwise>2</c:otherwise>
           </c:choose>
         </div>
-        <div class="step-label">Código</div>
+        <div class="step-label"><fmt:message key="rec.step.code"/></div>
       </div>
 
       <div class="step-line ${paso == 'nueva' ? 'done' : ''}"></div>
 
       <div class="step ${paso == 'nueva' ? 'active' : ''}">
         <div class="step-circle">3</div>
-        <div class="step-label">Nueva clave</div>
+        <div class="step-label"><fmt:message key="rec.step.newkey"/></div>
       </div>
     </div>
 
@@ -309,8 +309,8 @@
     <c:if test="${paso == 'solicitar'}">
 
       <div class="rec-icon"><i class="fas fa-lock-open"></i></div>
-      <div class="rec-title">Recuperar contraseña</div>
-      <div class="rec-sub">Ingresa tu correo registrado y te enviaremos un código de verificación</div>
+      <div class="rec-title"><fmt:message key="rec.title.step1"/></div>
+      <div class="rec-sub"><fmt:message key="rec.sub.step1"/></div>
 
       <c:if test="${not empty errorMsg}">
         <div class="alert-err"><i class="fas fa-exclamation-circle"></i> ${errorMsg}</div>
@@ -322,21 +322,21 @@
       <form method="post" action="${pageContext.request.contextPath}/recuperar" id="frmSolicitar">
         <input type="hidden" name="paso" value="solicitar">
         <div class="field-group">
-          <label for="email">Correo electrónico</label>
+          <label for="email"><fmt:message key="rec.label.email"/></label>
           <div class="field-wrap">
             <span class="field-icon"><i class="fas fa-envelope"></i></span>
             <input type="email" name="email" id="email" class="field-input"
-                   placeholder="tu@correo.com" required autocomplete="email"
+                   placeholder="<fmt:message key="rec.placeholder.email"/>" required autocomplete="email"
                    autofocus>
           </div>
         </div>
         <button type="submit" class="btn-main" id="btnSolicitar">
-          <i class="fas fa-paper-plane"></i> Enviar código
+          <i class="fas fa-paper-plane"></i> <fmt:message key="rec.btn.send"/>
         </button>
       </form>
 
       <a href="${pageContext.request.contextPath}/login" class="btn-back">
-        <i class="fas fa-arrow-left"></i> Volver al inicio de sesión
+        <i class="fas fa-arrow-left"></i> <fmt:message key="rec.btn.back.login"/>
       </a>
 
     </c:if>
@@ -347,12 +347,12 @@
     <c:if test="${paso == 'verificar'}">
 
       <div class="rec-icon"><i class="fas fa-shield-alt"></i></div>
-      <div class="rec-title">Verificar código</div>
+      <div class="rec-title"><fmt:message key="rec.title.step2"/></div>
       <div class="rec-sub">
-        Ingresa el código de 6 dígitos enviado a
+        <fmt:message key="rec.sub.step2"/>
         <c:choose>
           <c:when test="${not empty emailMasked}"><strong>${emailMasked}</strong></c:when>
-          <c:otherwise><strong>tu correo</strong></c:otherwise>
+          <c:otherwise><strong><fmt:message key="rec.sub.step2.fallback"/></strong></c:otherwise>
         </c:choose>
       </div>
 
@@ -380,20 +380,20 @@
         <%-- Timer + reenviar --%>
         <div class="timer-wrap">
           <span class="timer-text" id="timerText">
-            Reenviar código en <span class="timer-num" id="timerNum">5:00</span>
+            <fmt:message key="rec.timer.prefix"/> <span class="timer-num" id="timerNum">5:00</span>
           </span>
           <button type="button" class="resend-link" id="resendBtn" onclick="reenviarCodigo()">
-            <i class="fas fa-redo"></i> Reenviar código
+            <i class="fas fa-redo"></i> <fmt:message key="rec.btn.resend"/>
           </button>
         </div>
 
         <button type="submit" class="btn-main" id="btnVerificar" disabled>
-          <i class="fas fa-check-circle"></i> Verificar código
+          <i class="fas fa-check-circle"></i> <fmt:message key="rec.btn.verify"/>
         </button>
       </form>
 
       <a href="${pageContext.request.contextPath}/recuperar?paso=solicitar" class="btn-back">
-        <i class="fas fa-arrow-left"></i> Cambiar correo
+        <i class="fas fa-arrow-left"></i> <fmt:message key="rec.btn.change.email"/>
       </a>
 
     </c:if>
@@ -404,8 +404,8 @@
     <c:if test="${paso == 'nueva'}">
 
       <div class="rec-icon"><i class="fas fa-key"></i></div>
-      <div class="rec-title">Nueva contraseña</div>
-      <div class="rec-sub">Elige una contraseña segura para tu cuenta</div>
+      <div class="rec-title"><fmt:message key="rec.title.step3"/></div>
+      <div class="rec-sub"><fmt:message key="rec.sub.step3"/></div>
 
       <c:if test="${not empty errorMsg}">
         <div class="alert-err"><i class="fas fa-exclamation-circle"></i> ${errorMsg}</div>
@@ -415,11 +415,11 @@
         <input type="hidden" name="paso" value="nueva">
 
         <div class="field-group">
-          <label for="password">Nueva contraseña</label>
+          <label for="password"><fmt:message key="rec.label.newpass"/></label>
           <div class="field-wrap">
             <span class="field-icon"><i class="fas fa-lock"></i></span>
             <input type="password" name="password" id="password" class="field-input"
-                   placeholder="Mínimo 6 caracteres" required autocomplete="new-password"
+                   placeholder="<fmt:message key="rec.placeholder.newpass"/>" required autocomplete="new-password"
                    oninput="updateStrength(this.value)" autofocus>
             <button type="button" class="pass-toggle" onclick="togglePass('password','eyePass')">
               <i class="fas fa-eye" id="eyePass"></i>
@@ -435,11 +435,11 @@
         </div>
 
         <div class="field-group">
-          <label for="confirmar">Confirmar contraseña</label>
+          <label for="confirmar"><fmt:message key="rec.label.confirm"/></label>
           <div class="field-wrap">
             <span class="field-icon"><i class="fas fa-lock"></i></span>
             <input type="password" name="confirmar" id="confirmar" class="field-input"
-                   placeholder="Repite la contraseña" required autocomplete="new-password"
+                   placeholder="<fmt:message key="rec.placeholder.confirm"/>" required autocomplete="new-password"
                    oninput="checkMatch()">
             <button type="button" class="pass-toggle" onclick="togglePass('confirmar','eyeConf')">
               <i class="fas fa-eye" id="eyeConf"></i>
@@ -449,7 +449,7 @@
         </div>
 
         <button type="submit" class="btn-main" id="btnNueva">
-          <i class="fas fa-save"></i> Guardar contraseña
+          <i class="fas fa-save"></i> <fmt:message key="rec.btn.save"/>
         </button>
       </form>
 
@@ -458,8 +458,8 @@
     <%-- Footer --%>
     <div class="rec-footer">
       <i class="fas fa-shield-alt" style="color:var(--green-mid);margin-right:.3rem;"></i>
-      ¿Recuerdas tu contraseña?
-      <a href="${pageContext.request.contextPath}/login">Inicia sesión</a>
+      <fmt:message key="rec.footer.remember"/>
+      <a href="${pageContext.request.contextPath}/login"><fmt:message key="rec.footer.signin"/></a>
     </div>
 
   </div>
@@ -548,7 +548,7 @@ function updateStrength(val) {
   if (/[0-9]/.test(val) && /[\W_]/.test(val)) score++;
 
   const colors  = ['#ef4444','#f97316','#eab308','#22c55e'];
-  const labels  = ['Muy débil','Débil','Aceptable','Fuerte'];
+  const labels  = MSG_STRENGTH;
   segs.forEach((s, i) => s.style.background = i < score ? colors[score - 1] : 'var(--border)');
   label.textContent  = val.length ? labels[score - 1] || labels[0] : '';
   label.style.color  = score > 0 ? colors[score - 1] : 'var(--text-lt)';
@@ -561,10 +561,10 @@ function checkMatch() {
   if (!p || !c || !h) return;
   if (!c.value) { h.textContent = ''; return; }
   if (p.value === c.value) {
-    h.textContent = '✓ Las contraseñas coinciden';
+    h.textContent = MSG_PWD_MATCH;
     h.style.color = '#16a34a';
   } else {
-    h.textContent = '✗ Las contraseñas no coinciden';
+    h.textContent = MSG_PWD_NO_MATCH;
     h.style.color = '#ef4444';
   }
 }
@@ -586,12 +586,12 @@ if (frmNueva) {
     const c = document.getElementById('confirmar').value;
     if (p.length < 6) {
       e.preventDefault();
-      alert('La contraseña debe tener al menos 6 caracteres.');
+      alert(MSG_PWD_MIN);
       return;
     }
     if (p !== c) {
       e.preventDefault();
-      alert('Las contraseñas no coinciden.');
+      alert(MSG_PWD_NOMATCH2);
     }
   });
 }

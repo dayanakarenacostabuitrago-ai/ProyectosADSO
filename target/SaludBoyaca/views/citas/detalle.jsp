@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Detalle de Cita — SaludBoyacá</title>
+    <title>${msg["cita.detail"]} — SaludBoyacá</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -268,7 +268,7 @@
 
                 <c:if test="${cita.estado != 'CANCELADA' && cita.estado != 'ATENDIDA'}">
                 <form method="post" action="${pageContext.request.contextPath}/citas" class="d-inline"
-                      onsubmit="return confirm('¿Seguro que deseas cancelar esta cita?')">
+                      onsubmit="return confirm('${msg["cita.confirm.cancel"]}')">
                     <input type="hidden" name="accion" value="cambiarEstado">
                     <input type="hidden" name="idCita" value="${cita.idCita}">
                     <input type="hidden" name="estado" value="CANCELADA">

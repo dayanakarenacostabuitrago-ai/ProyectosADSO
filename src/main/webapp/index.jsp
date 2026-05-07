@@ -4,11 +4,11 @@
 <fmt:setLocale value="${not empty sessionScope.lang ? sessionScope.lang : 'es'}" />
 <fmt:setBundle basename="messages" />
 <!DOCTYPE html>
-<html lang="es">
+<html lang="${not empty sessionScope.lang ? sessionScope.lang : 'es'}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SaludBoyaca - Centro Médico Integral</title>
+    <title><fmt:message key="index.title"/></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
@@ -812,6 +812,32 @@
             .hero-stats-row { flex-wrap: wrap; gap: 1rem; }
             .hero-title { font-size: 2rem; }
         }
+
+        /* Selector de idioma en navbar */
+        .nav-lang-switcher {
+            display: flex;
+            gap: 0.25rem;
+            align-items: center;
+        }
+        .nav-lang-btn {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text-dark);
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 0.3rem 0.55rem;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+            line-height: 1;
+        }
+        .nav-lang-btn:hover,
+        .nav-lang-btn.active {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
+        }
     </style>
 </head>
 <body>
@@ -819,8 +845,8 @@
 <!-- ═══ URGENCY BAR ═══ -->
 <div class="urgency-bar">
     <i class="fas fa-exclamation-circle"></i>
-    <strong>¿Urgencia médica?</strong>
-    Llama a nuestra línea 24/7 al <a href="tel:8001234567">800-123-4567</a> o acude a urgencias inmediatamente.
+    <strong><fmt:message key="index.urgency.label"/></strong>
+    <fmt:message key="index.urgency.line"/>
 </div>
 
 <!-- ═══ NAVBAR ═══ -->
@@ -828,20 +854,28 @@
     <a class="nav-brand" href="#">SaludBoyacá</a>
 
     <div class="nav-links">
-        <a href="#especialidades">Especialidades</a>
-        <a href="#medicos">Nuestro Equipo</a>
-        <a href="#">Artículos</a>
-        <a href="#">Contacto</a>
+        <a href="#especialidades"><fmt:message key="index.nav.specialties"/></a>
+        <a href="#medicos"><fmt:message key="index.nav.our.team"/></a>
+        <a href="#"><fmt:message key="index.nav.articles"/></a>
+        <a href="#"><fmt:message key="index.nav.contact"/></a>
     </div>
 
     <div class="nav-actions">
+        <div class="nav-lang-switcher">
+            <a href="${pageContext.request.contextPath}/?lang=es"
+               class="nav-lang-btn ${(empty sessionScope.lang || sessionScope.lang=='es') ? 'active' : ''}">&#127464;&#127476; ES</a>
+            <a href="${pageContext.request.contextPath}/?lang=en"
+               class="nav-lang-btn ${sessionScope.lang=='en' ? 'active' : ''}">&#127482;&#127480; EN</a>
+            <a href="${pageContext.request.contextPath}/?lang=it"
+               class="nav-lang-btn ${sessionScope.lang=='it' ? 'active' : ''}">&#127470;&#127481; IT</a>
+        </div>
         <!-- Un solo botón de Consultar Cita -->
         <a href="${pageContext.request.contextPath}/consulta_cita" class="btn-ghost">
-            <i class="fas fa-search"></i> Consultar Cita
+            <i class="fas fa-search"></i> <fmt:message key="index.footer.consult"/>
         </a>
         <!-- CAMBIO: redirige directamente a /login en lugar de abrir el modal -->
         <a href="${pageContext.request.contextPath}/login" class="btn-ghost">
-            <i class="fas fa-user"></i> Iniciar sesión
+            <i class="fas fa-user"></i> <fmt:message key="index.btn.login"/>
         </a>
     </div>
 </nav>
@@ -852,8 +886,8 @@
         <div class="login-card-head">
             <div class="lc-icon"><i class="fas fa-shield-alt"></i></div>
             <div>
-                <h3>Acceso al Sistema</h3>
-                <small>SaludBoyacá - Portal Profesional</small>
+                <h3><fmt:message key="index.access.title"/></h3>
+                <small><fmt:message key="index.access.subtitle"/></small>
             </div>
         </div>
         <div class="login-card-body" id="loginFormSection">
@@ -873,14 +907,14 @@
                 <span id="jsErrorMsg"></span>
             </div>
             <div class="lf-group">
-                <label>Usuario</label>
+                <label><fmt:message key="login.user"/></label>
                 <div class="lf-input-wrap">
                     <i class="fas fa-user"></i>
                     <input type="text" id="usernameField" class="lf-input" placeholder="Ingrese su usuario" autocomplete="username">
                 </div>
             </div>
             <div class="lf-group">
-                <label>Contraseña</label>
+                <label><fmt:message key="login.pass"/></label>
                 <div class="lf-input-wrap">
                     <i class="fas fa-lock"></i>
                     <input type="password" id="passwordField" class="lf-input" placeholder="••••••••" autocomplete="current-password">
@@ -891,14 +925,14 @@
             </button>
         </div>
         <div class="otp-section hidden" id="otpSection">
-            <p class="otp-hint">Código enviado a su correo registrado.<br>Ingrese el código de <strong>6 dígitos</strong> para continuar.</p>
+            <p class="otp-hint"><fmt:message key="index.otp.hint"/></p>
             <input type="text" class="otp-input-big" id="otpCode" maxlength="6" placeholder="000000" inputmode="numeric" autocomplete="one-time-code">
-            <div class="otp-timer"><i class="fas fa-clock"></i> Expira en <span id="otp-countdown">5:00</span></div>
+            <div class="otp-timer"><i class="fas fa-clock"></i> <fmt:message key="index.otp.expira"/> <span id="otp-countdown">5:00</span></div>
             <button class="btn-verificar" id="btnVerificar" onclick="submitOtp()">
-                <i class="fas fa-check-circle me-1"></i> Verificar Código
+                <i class="fas fa-check-circle me-1"></i> <fmt:message key="index.btn.verify.code"/>
             </button>
             <button class="btn-reenviar-link" onclick="reenviarOtp()">
-                <i class="fas fa-redo me-1"></i> Reenviar código
+                <i class="fas fa-redo me-1"></i> <fmt:message key="index.btn.resend.code"/>
             </button>
         </div>
     </div>
@@ -910,46 +944,46 @@
         <div class="hero-left">
             <div class="hero-badge-pill">
                 <span class="dot"></span>
-                Servicio de Urgencias 24/7
+                <fmt:message key="index.urgency.badge"/>
             </div>
             <h1 class="hero-title">
-                Excelencia médica,<br>
+                <fmt:message key="index.hero.title"/><br>
                 <span class="accent">cuidado humano.</span>
             </h1>
             <p class="hero-desc">
-                Un hospital moderno con más de 50 especialistas enfocados en tu salud real.
-                Accede a tu expediente y gestiona tus consultas médicas en un solo lugar.
+                <fmt:message key="index.hero.subtitle"/>
+                <fmt:message key="index.hero.desc"/>
             </p>
             <div class="hero-cta-row">
                 <a href="${pageContext.request.contextPath}/consulta_cita" class="btn-hero-primary">
-                    <i class="fas fa-calendar-check"></i> Consultar Citas
+                    <i class="fas fa-calendar-check"></i> <fmt:message key="index.btn.consultar.citas"/>
                 </a>
                 <!-- CAMBIO: Portal Pacientes redirige a /login directamente -->
                 <a href="${pageContext.request.contextPath}/login" class="btn-hero-secondary">
-                    <i class="fas fa-user-circle"></i> Portal Pacientes
+                    <i class="fas fa-user-circle"></i> <fmt:message key="index.btn.portal.pacientes"/>
                 </a>
             </div>
             <div class="hero-stats-row">
                 <div class="hero-stat">
                     <strong>98%</strong>
-                    <span>Satisfacción</span>
+                    <span><fmt:message key="index.stat.satisfaction"/></span>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="hero-stat">
                     <strong>+50</strong>
-                    <span>Especialidades</span>
+                    <span><fmt:message key="index.stat.specialties.label"/></span>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="hero-stat">
                     <strong>15k</strong>
-                    <span>Pacientes Anuales</span>
+                    <span><fmt:message key="index.stat.patients.annual"/></span>
                 </div>
             </div>
         </div>
 
         <div class="hero-right">
             <div class="hero-img-wrap">
-                <img src="https://i.pinimg.com/1200x/9a/e9/2f/9ae92f85aa88d39eed0f42f51a48315b.jpg" alt="Equipo médico">
+                <img src="https://i.pinimg.com/1200x/9a/e9/2f/9ae92f85aa88d39eed0f42f51a48315b.jpg" alt="<fmt:message key='index.doctors.tag'/>">
                 <div class="hero-img-overlay"></div>
                 <div class="doctors-badge">
                     <div class="av-stack">
@@ -958,21 +992,21 @@
                         <div class="av"><img src="https://randomuser.me/api/portraits/women/65.jpg" alt=""></div>
                     </div>
                     <div>
-                        <div class="av-text">20+ Médicos</div>
-                        <div class="av-sub">Disponibles hoy</div>
+                        <div class="av-text">20+ <fmt:message key="role.medico"/>s</div>
+                        <div class="av-sub"><fmt:message key="index.stat.available.today"/></div>
                     </div>
                 </div>
                 <div class="appt-card">
-                    <div class="ac-label">PRÓXIMA CITA</div>
+                    <div class="ac-label"><fmt:message key="index.next.appointment"/></div>
                     <div class="ac-date">
                         <div class="ac-day">24</div>
                         <div class="ac-info">
-                            <strong>Cardiología</strong>
+                            <strong><fmt:message key="index.esp.cardiology"/></strong>
                             <small>10:30 am · Dr. Santos</small>
                         </div>
                     </div>
                     <a href="${pageContext.request.contextPath}/consulta_cita" class="ac-link">
-                        Ver detalles en el portal →
+                        <fmt:message key="index.link.ver.detalles"/>
                     </a>
                 </div>
             </div>
@@ -983,7 +1017,7 @@
 <!-- ═══ SEGUROS ═══ -->
 <div class="seguros-section">
     <div class="seguros-inner">
-        <div class="seguros-label">ACEPTAMOS LOS PRINCIPALES SEGUROS MÉDICOS:</div>
+        <div class="seguros-label"><fmt:message key="index.insurance.label"/></div>
         <div class="seguros-logos">
             <span class="seguro-name">AllianzLife</span>
             <span class="seguro-name">MediCare+</span>
@@ -999,36 +1033,36 @@
     <div class="section-inner">
         <div class="section-header-row">
             <div>
-                <div class="section-tag">SERVICIOS MÉDICOS</div>
-                <h2 class="section-title">Especialidades destacadas</h2>
-                <p class="section-desc">Contamos con instalaciones de primer nivel y médicos certificados en las ramas más importantes de la salud.</p>
+                <div class="section-tag"><fmt:message key="index.services.tag"/></div>
+                <h2 class="section-title"><fmt:message key="index.services.title"/></h2>
+                <p class="section-desc"><fmt:message key="index.services.desc"/></p>
             </div>
-            <a href="#" class="btn-outline-green">Ver directorio médico</a>
+            <a href="#" class="btn-outline-green"><fmt:message key="index.see.directory"/></a>
         </div>
         <div class="esp-grid">
             <a href="${pageContext.request.contextPath}/consulta_cita" class="esp-card">
                 <div class="esp-icon"><i class="fas fa-heartbeat"></i></div>
-                <h4>Cardiología</h4>
-                <p>Diagnóstico y tratamiento de enfermedades del corazón con tecnología de punta.</p>
-                <div class="esp-link">Saber más <i class="fas fa-arrow-right"></i></div>
+                <h4><fmt:message key="index.esp.cardiology"/></h4>
+                <p><fmt:message key="index.esp.cardiology.desc"/></p>
+                <div class="esp-link"><fmt:message key="index.learn.more"/> <i class="fas fa-arrow-right"></i></div>
             </a>
             <a href="${pageContext.request.contextPath}/consulta_cita" class="esp-card">
                 <div class="esp-icon"><i class="fas fa-baby"></i></div>
-                <h4>Pediatría</h4>
-                <p>Cuidado integral para el desarrollo y salud de los más pequeños de la familia.</p>
-                <div class="esp-link">Saber más <i class="fas fa-arrow-right"></i></div>
+                <h4><fmt:message key="index.esp.pediatrics"/></h4>
+                <p><fmt:message key="index.esp.pediatrics.desc"/></p>
+                <div class="esp-link"><fmt:message key="index.learn.more"/> <i class="fas fa-arrow-right"></i></div>
             </a>
             <a href="${pageContext.request.contextPath}/consulta_cita" class="esp-card">
                 <div class="esp-icon"><i class="fas fa-flask"></i></div>
-                <h4>Laboratorio</h4>
-                <p>Análisis clínicos con resultados rápidos directamente en tu portal de paciente.</p>
-                <div class="esp-link">Saber más <i class="fas fa-arrow-right"></i></div>
+                <h4><fmt:message key="index.esp.lab"/></h4>
+                <p><fmt:message key="index.esp.lab.desc"/></p>
+                <div class="esp-link"><fmt:message key="index.learn.more"/> <i class="fas fa-arrow-right"></i></div>
             </a>
             <a href="${pageContext.request.contextPath}/consulta_cita" class="esp-card">
                 <div class="esp-icon"><i class="fas fa-bone"></i></div>
-                <h4>Traumatología</h4>
-                <p>Especialistas en recuperación, fracturas y lesiones deportivas.</p>
-                <div class="esp-link">Saber más <i class="fas fa-arrow-right"></i></div>
+                <h4><fmt:message key="index.esp.trauma"/></h4>
+                <p><fmt:message key="index.esp.trauma.desc"/></p>
+                <div class="esp-link"><fmt:message key="index.learn.more"/> <i class="fas fa-arrow-right"></i></div>
             </a>
         </div>
     </div>
@@ -1038,18 +1072,18 @@
 <section class="historial-section">
     <div class="historial-inner">
         <div class="historial-content">
-            <div class="section-tag">TU SALUD, SIEMPRE CONTIGO</div>
-            <h2 class="section-title" style="color:#fff;">Tu historial médico,<br>siempre a tu alcance.</h2>
+            <div class="section-tag"><fmt:message key="index.feature.tag"/></div>
+            <h2 class="section-title" style="color:#fff;"><fmt:message key="index.feature.title"/></h2>
             <p class="section-desc">
-                Ingresa al Portal de Pacientes para revisar resultados de laboratorio, recetas digitales y el estado de tus próximas citas. Todo de forma segura y confidencial.
+                <fmt:message key="index.feature.portal.desc"/> Todo de forma segura y confidencial.
             </p>
             <div class="historial-cta-row">
                 <!-- CAMBIO: redirige a /login directamente -->
                 <a href="${pageContext.request.contextPath}/login" class="btn-white">
-                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión en el Portal
+                    <i class="fas fa-sign-in-alt"></i> <fmt:message key="index.feature.portal.btn"/>
                 </a>
                 <a href="${pageContext.request.contextPath}/consulta_cita" class="btn-ghost-white">
-                    <i class="fas fa-calendar-check"></i> Consultar Citas Rápidas
+                    <i class="fas fa-calendar-check"></i> <fmt:message key="index.feature.consult.btn"/>
                 </a>
             </div>
         </div>
@@ -1057,23 +1091,23 @@
         <div class="historial-right">
             <div class="resumen-card">
                 <div class="resumen-card-head">
-                    <span>Resumen Clínico</span>
-                    <small>Actualizado hoy</small>
+                    <span><fmt:message key="index.clinical.summary"/></span>
+                    <small><fmt:message key="index.updated.today"/></small>
                 </div>
                 <div class="resumen-vitals">
                     <div class="vital-item">
                         <strong>120/80</strong>
-                        <small>Presión Arterial</small>
+                        <small><fmt:message key="index.blood.pressure"/></small>
                     </div>
                     <div class="vital-item">
                         <strong>92 mg/dL</strong>
-                        <small>Glucosa</small>
+                        <small><fmt:message key="index.glucose"/></small>
                     </div>
                 </div>
                 <div class="resumen-lab">
                     <div>
-                        <strong>Resultados de Laboratorio</strong>
-                        <small>Biometría Hemática · Completo</small>
+                        <strong><fmt:message key="index.lab.results"/></strong>
+                        <small><fmt:message key="index.lab.subtitle"/></small>
                     </div>
                     <a href="#" class="btn-pdf"><i class="fas fa-download me-1"></i> Descargar PDF</a>
                 </div>
@@ -1087,9 +1121,9 @@
     <div class="section-inner">
         <div class="section-header-row">
             <div>
-                <div class="section-tag">PROFESIONALES DE LA SALUD</div>
-                <h2 class="section-title">Médicos Especialistas</h2>
-                <p class="section-desc">Un equipo multidisciplinario altamente capacitado, listo para brindarte el mejor diagnóstico y tratamiento.</p>
+                <div class="section-tag"><fmt:message key="index.doctors.tag"/></div>
+                <h2 class="section-title"><fmt:message key="index.doctors.title"/></h2>
+                <p class="section-desc"><fmt:message key="index.doctors.desc"/></p>
             </div>
         </div>
         <div class="medicos-grid">
@@ -1097,9 +1131,9 @@
                 <img class="medico-img" src="https://i.pinimg.com/1200x/54/2f/05/542f0566f2e65f3698722b394568d92e.jpg" alt="Dr. Jacob ">
                 <div class="medico-body">
                     <h4>Dr. Jacob Montenegro</h4>
-                    <div class="esp-tag">Cardiologo Clínico</div>
+                    <div class="esp-tag"><fmt:message key="index.dr.jacob.specialty"/></div>
                     <a href="${pageContext.request.contextPath}/consulta_cita" class="btn-agendar">
-                        <i class="fas fa-calendar-plus"></i> Agendar cita
+                        <i class="fas fa-calendar-plus"></i> <fmt:message key="index.btn.agendar.cita"/>
                     </a>
                 </div>
             </div>
@@ -1107,9 +1141,9 @@
                 <img class="medico-img" src="https://i.pinimg.com/1200x/95/aa/75/95aa755d19719a2f83b3a3f45b03adc6.jpg" alt="Dr. Roberto Santos">
                 <div class="medico-body">
                     <h4>Dr. Roberto Santos</h4>
-                    <div class="esp-tag">Cirujano General</div>
+                    <div class="esp-tag"><fmt:message key="index.dr.roberto.specialty"/></div>
                     <a href="${pageContext.request.contextPath}/consulta_cita" class="btn-agendar">
-                        <i class="fas fa-calendar-plus"></i> Agendar cita
+                        <i class="fas fa-calendar-plus"></i> <fmt:message key="index.btn.agendar.cita"/>
                     </a>
                 </div>
             </div>
@@ -1117,15 +1151,15 @@
                 <img class="medico-img" src="https://i.pinimg.com/1200x/fb/e4/fd/fbe4fdaf2db918c5998a6105d47107e1.jpg" alt="Dra. Elena Ruiz">
                 <div class="medico-body">
                     <h4>Dra. Elena Ruiz</h4>
-                    <div class="esp-tag">Pediatra</div>
+                    <div class="esp-tag"><fmt:message key="index.dr.elena.specialty"/></div>
                     <a href="${pageContext.request.contextPath}/consulta_cita" class="btn-agendar">
-                        <i class="fas fa-calendar-plus"></i> Agendar cita
+                        <i class="fas fa-calendar-plus"></i> <fmt:message key="index.btn.agendar.cita"/>
                     </a>
                 </div>
             </div>
         </div>
         <div class="medicos-ver-mas">
-            <a href="#" class="btn-ver-todos">Ver todos los médicos <i class="fas fa-arrow-right"></i></a>
+            <a href="#" class="btn-ver-todos"><fmt:message key="index.see.all.doctors"/> <i class="fas fa-arrow-right"></i></a>
         </div>
     </div>
 </section>
@@ -1136,28 +1170,28 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <h3>SaludBoyacá</h3>
-                <p>Tu bienestar es nuestra prioridad. Cuidado integral en un entorno de paz.</p>
+                <p><fmt:message key="index.footer.slogan"/></p>
             </div>
             <div class="footer-col">
-                <h4>Enlaces</h4>
+                <h4><fmt:message key="index.footer.links"/></h4>
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/consulta_cita">Agendar Cita</a></li>
-                    <li><a href="${pageContext.request.contextPath}/consulta_cita">Consultar Cita</a></li>
+                    <li><a href="${pageContext.request.contextPath}/consulta_cita"><fmt:message key="index.footer.book"/></a></li>
+                    <li><a href="${pageContext.request.contextPath}/consulta_cita"><fmt:message key="index.footer.consult"/></a></li>
                     <!-- CAMBIO: enlace directo a /login -->
-                    <li><a href="${pageContext.request.contextPath}/login">Login de Pacientes</a></li>
+                    <li><a href="${pageContext.request.contextPath}/login"><fmt:message key="index.footer.login"/></a></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h4>Servicios</h4>
+                <h4><fmt:message key="index.footer.services"/></h4>
                 <ul>
-                    <li><a href="#">Medicina General</a></li>
-                    <li><a href="#">Nutrición Integral</a></li>
-                    <li><a href="#">Dermatología y Estética</a></li>
-                    <li><a href="#">Salud Mental</a></li>
+                    <li><a href="#"><fmt:message key="index.svc.general"/></a></li>
+                    <li><a href="#"><fmt:message key="index.svc.nutrition"/></a></li>
+                    <li><a href="#"><fmt:message key="index.svc.derma"/></a></li>
+                    <li><a href="#"><fmt:message key="index.svc.mental"/></a></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h4>Contacto Rápido</h4>
+                <h4><fmt:message key="index.footer.contact"/></h4>
                 <div class="contact-info">
                     800-SERENA-9<br>
                     hola@saludboyaca.co<br>
@@ -1166,10 +1200,10 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <small>© 2026 SaludBoyacá · SENA CIMM · Todos los derechos reservados</small>
+            <small><fmt:message key="index.footer.rights"/></small>
             <div class="footer-bottom-links">
-                <a href="#">Privacidad</a>
-                <a href="#">Términos</a>
+                <a href="#"><fmt:message key="consulta.privacy"/></a>
+                <a href="#"><fmt:message key="consulta.terms"/></a>
             </div>
         </div>
     </div>
@@ -1184,7 +1218,7 @@
     function handleLogin() {
         var user = document.getElementById('usernameField').value.trim();
         var pass = document.getElementById('passwordField').value.trim();
-        if (!user || !pass) { showJsError('Por favor complete usuario y contraseña.'); return; }
+        if (!user || !pass) { showJsError(MSG_FILL_LOGIN); return; }
         var btn = document.getElementById('btnIngresar');
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Verificando...';
@@ -1201,7 +1235,7 @@
                     window.location.href = r.url;
                 } else {
                     return r.text().then(function() {
-                        showJsError('Usuario o contraseña incorrectos.');
+                        showJsError(MSG_LOGIN_ERR);
                         btn.disabled = false;
                         btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingresar';
                     });
@@ -1224,6 +1258,12 @@
         startOtpTimer();
         document.getElementById('otpCode').focus();
     }
+    // i18n messages for JavaScript (index.jsp)
+    var MSG_FILL_LOGIN   = '<fmt:message key="index.js.fill.login"/>';
+    var MSG_LOGIN_ERR    = '<fmt:message key="index.js.login.error"/>';
+    var MSG_OTP_EXPIRED  = '<fmt:message key="index.js.otp.expired"/>';
+    var MSG_OTP_ENTER    = '<fmt:message key="index.js.otp.enter"/>';
+    var MSG_OTP_VERIFY   = '<fmt:message key="index.js.otp.verifying"/>';
     function showJsError(msg) {
         var el = document.getElementById('jsError');
         document.getElementById('jsErrorMsg').textContent = msg;
@@ -1242,13 +1282,13 @@
             if (restante <= 0) {
                 clearInterval(otpTimerInterval);
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-clock me-1"></i> Código expirado';
+                btn.innerHTML = '<i class="fas fa-clock me-1"></i> ' + MSG_OTP_EXPIRED;
             }
         }, 1000);
     }
     function submitOtp() {
         var code = document.getElementById('otpCode').value.trim();
-        if (code.length !== 6 || !/^\d{6}$/.test(code)) { alert('Ingrese el código de 6 dígitos.'); return; }
+        if (code.length !== 6 || !/^\d{6}$/.test(code)) { alert(MSG_OTP_ENTER); return; }
         var f = document.createElement('form'); f.method='POST';
         f.action = '${pageContext.request.contextPath}/otp?accion=validar';
         var c = document.createElement('input'); c.type='hidden'; c.name='otpCodigo'; c.value=code;
@@ -1260,7 +1300,7 @@
         document.getElementById('otpCode').value = '';
         var btn = document.getElementById('btnVerificar');
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Verificar Código';
+        btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> <fmt:message key="index.btn.verify.code"/>';
         document.getElementById('otp-countdown').classList.remove('urgente');
         startOtpTimer();
     }

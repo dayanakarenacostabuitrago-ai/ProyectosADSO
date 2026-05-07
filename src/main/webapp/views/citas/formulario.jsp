@@ -9,7 +9,7 @@
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1">
-                <title>${not empty cita ? 'Editar' : 'Nueva'} Cita — SaludBoyacá</title>
+                <title>${not empty cita ? msg['cita.editar'] : msg['cita.new']} — SaludBoyacá</title>
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
                 <style>
@@ -112,7 +112,7 @@
                                                     <c:choose>
                                                         <c:when test="${not empty medicosCita}">
                                                             <%-- Modo editar: ya tenemos los médicos de esa especialidad --%>
-                                                            <option value="">— Selecciona médico —</option>
+                                                            <option value="">${msg['cita.select.doctor']}</option>
                                                             <c:forEach var="med" items="${medicosCita}">
                                                                 <option value="${med.idUsuario}"
                                                                     ${cita.idUsuario == med.idUsuario ? 'selected' : ''}>
@@ -148,7 +148,7 @@
                                                         class="fas fa-calendar me-1 text-muted"></i><fmt:message key="cita.fecha"/> <span class="text-danger">*</span></label>
                                                 <select name="fechaCita" id="selFecha" class="form-select" required
                                                     onchange="cargarHoras()">
-                                                    <option value="">— Primero selecciona médico —</option>
+                                                    <option value="">${msg['cita.select.doctor.first']}</option>
                                                     <c:if test="${not empty cita}">
                                                         <option value="${cita.fechaCita}" selected>${cita.fechaCita}</option>
                                                     </c:if>
@@ -160,7 +160,7 @@
                                                 <label class="form-label"><i
                                                         class="fas fa-clock me-1 text-muted"></i><fmt:message key="cita.hora"/> <span class="text-danger">*</span></label>
                                                 <select name="horaCita" id="selHora" class="form-select" required>
-                                                    <option value="">— Selecciona médico y fecha —</option>
+                                                    <option value="">${msg['cita.select.doctor.and.date']}</option>
                                                     <c:if test="${not empty cita}">
                                                         <option value="${cita.horaCita}" selected>${cita.horaCita}
                                                         </option>
@@ -220,13 +220,13 @@
                                         fetch(ctx + '/citas?accion=medicosPorEspecialidad&idEspecialidad=' + idEsp)
                                             .then(r => r.json())
                                             .then(data => {
-                                                sel.innerHTML = '<option value="">— Selecciona médico —</option>';
+                                                sel.innerHTML = '<option value="">' + MSG_SELECT_DOCTOR + '</option>';
                                                 data.forEach(m => {
                                                     sel.innerHTML += '<option value="' + m.id + '">' + m.nombre + '</option>';
                                                 });
                                                 // Limpiar fechas y horas al cambiar especialidad
-                                                document.getElementById('selFecha').innerHTML = '<option value="">— Primero selecciona médico —</option>';
-                                                document.getElementById('selHora').innerHTML = '<option value="">— Selecciona médico y fecha —</option>';
+                                                document.getElementById('selFecha').innerHTML = '<option value="">' + MSG_SELECT_DOC_FIRST + '</option>';
+                                                document.getElementById('selHora').innerHTML = '<option value="">' + MSG_SELECT_DOC_DATE + '</option>';
                                                 diasHabilitados = [];
                                             }).catch(() => { sel.innerHTML = '<option value="">Error al cargar</option>'; });
                                     }
@@ -235,11 +235,11 @@
                                         const selF = document.getElementById('selFecha');
                                         const selH = document.getElementById('selHora');
                                         selF.innerHTML = '<option value="">Cargando fechas...</option>';
-                                        selH.innerHTML = '<option value="">— Selecciona médico y fecha —</option>';
+                                        selH.innerHTML = '<option value="">' + MSG_SELECT_DOC_DATE + '</option>';
                                         diasHabilitados = [];
 
                                         if (!idMedico) {
-                                            selF.innerHTML = '<option value="">— Primero selecciona médico —</option>';
+                                            selF.innerHTML = '<option value="">' + MSG_SELECT_DOC_FIRST + '</option>';
                                             return;
                                         }
 
@@ -250,7 +250,7 @@
                                                 selF.innerHTML = '<option value="">— Elige una fecha —</option>';
 
                                                 if (dias.length === 0) {
-                                                    selF.innerHTML = '<option value="">Sin días disponibles</option>';
+                                                    selF.innerHTML = '<option value="">' + MSG_NO_DAYS + '</option>';
                                                     return;
                                                 }
 
@@ -282,13 +282,13 @@ if (!dias.includes(dow)) continue;  // saltar días sin horario
                                         const idMedico = document.getElementById('selMedico').value;
                                         const fecha    = document.getElementById('selFecha').value;
                                         const sel      = document.getElementById('selHora');
-                                        if (!idMedico || !fecha) { sel.innerHTML = '<option value="">— Selecciona médico y fecha —</option>'; return; }
+                                        if (!idMedico || !fecha) { sel.innerHTML = '<option value="">' + MSG_SELECT_DOC_DATE + '</option>'; return; }
                                         sel.innerHTML = '<option value="">Cargando horas...</option>';
                                         fetch(ctx + '/citas?accion=horasDisponibles&idUsuario=' + idMedico + '&fecha=' + fecha)
                                             .then(r => r.json())
                                             .then(horas => {
                                                 if (horas.length === 0) {
-                                                    sel.innerHTML = '<option value="">Sin horas disponibles para este día</option>';
+                                                    sel.innerHTML = '<option value="">' + MSG_NO_HOURS + '</option>';
                                                 } else {
                                                     sel.innerHTML = '<option value="">— Elige hora —</option>';
                                                     horas.forEach(h => { sel.innerHTML += '<option value="' + h + '">' + h + '</option>'; });
