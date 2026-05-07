@@ -129,11 +129,9 @@
                                                                                    class="fan-btn fan-edit" title="Editar cita">
                                                                                     <i class="fas fa-edit"></i>
                                                                                 </a>
-                                                                                <a href="${pageContext.request.contextPath}/citas?accion=eliminar&id=${cita.idCita}"
-                                                                                   class="fan-btn fan-delete" title="Eliminar cita"
-                                                                                   onclick="return confirm('${msg[\"cita.confirm.delete\"]}')">
-                                                                                    <i class="fas fa-trash"></i>
-                                                                                </a>
+                                                                                <a href="accion=eliminar&id=${cita.idCita}"
+   class="fan-btn fan-delete"
+   onclick='return confirm("<fmt:message key="cita.confirm.delete"/>")'>
                                                                                 <a href="${pageContext.request.contextPath}/citas?accion=detalle&id=${cita.idCita}"
                                                                                    class="fan-btn fan-view" title="Ver detalle">
                                                                                     <i class="fas fa-eye"></i>
