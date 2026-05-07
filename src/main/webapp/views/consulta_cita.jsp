@@ -954,7 +954,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body p-0" style="height:75vh;">
-                <iframe id="iframeComprobante" src="" style="width:100%; height:100%; border:none;" title="Comprobante PDF"></iframe>
+                <embed id="iframeComprobante" src="" type="application/pdf" style="width:100%; height:100%; border:none;" />
             </div>
             <div class="modal-footer" style="border:none; background:var(--gray-bg); padding:.8rem 1.4rem; justify-content:space-between;">
                 <a id="linkDescarga" href="#" download style="color:var(--green-dark); font-size:.9rem; text-decoration:none;">
@@ -985,9 +985,11 @@
         modal.show();
     }
 
-    /* Limpiar iframe al cerrar para evitar que siga cargando */
+    /* Limpiar embed al cerrar para evitar que siga cargando */
     document.getElementById('modalComprobante').addEventListener('hidden.bs.modal', function () {
-        document.getElementById('iframeComprobante').src = '';
+        var embed = document.getElementById('iframeComprobante');
+        embed.removeAttribute('src');
+        embed.setAttribute('src', '');
     });
 </script>
 </body>
