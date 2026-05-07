@@ -11,8 +11,8 @@ co\sena\cimm\adso\saludboyaca\servlet\CitaServlet.class
 co\sena\cimm\adso\saludboyaca\dto\Especialidad.class
 co\sena\cimm\adso\saludboyaca\dao\UsuarioDAO.class
 co\sena\cimm\adso\saludboyaca\util\LocaleFilter.class
-co\sena\cimm\adso\saludboyaca\servlet\RecuperarPasswordServlet.class
 co\sena\cimm\adso\saludboyaca\servlet\EspecialidadesServlet.class
+co\sena\cimm\adso\saludboyaca\servlet\RecuperarPasswordServlet.class
 co\sena\cimm\adso\saludboyaca\servlet\LogoutServlet.class
 co\sena\cimm\adso\saludboyaca\util\PDFGenerator.class
 co\sena\cimm\adso\saludboyaca\dto\Cita.class
