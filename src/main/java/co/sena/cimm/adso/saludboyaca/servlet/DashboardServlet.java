@@ -62,6 +62,7 @@ public class DashboardServlet extends HttpServlet {
                 List<Cita> citasEnf = citaDAO.citasHoy();
                 enriquecerCitas(citasEnf);
                 request.setAttribute("citasHoy", citasEnf);
+                request.setAttribute("totalPacientes", pacienteDAO.totalPacientes());
                 break;
 
             case "ADMINISTRADOR":
