@@ -406,6 +406,17 @@ new Chart(document.getElementById('pieChart2'),{
   });
 })();
 
+// i18n messages for JavaScript (horarios section)
+var MSG_DAYS_LABELS  = '${msg["admin.days.labels"]}'.split(',');
+var MSG_NO_DOCS      = '${msg["admin.no.doctors"]}';
+var MSG_NO_SCHEDULES = '${msg["admin.no.schedules"]}';
+var MSG_TH_DAY       = '${msg["admin.table.day"]}';
+var MSG_TH_START     = '${msg["admin.table.start"]}';
+var MSG_TH_END       = '${msg["admin.table.end"]}';
+var MSG_TH_MAX       = '${msg["admin.table.max"]}';
+// Days in Spanish — must match DB values, do NOT translate
+var MSG_DAYS         = ['Lunes','Martes','Miércoles','Jueves','Viernes'];
+
 // ── Horarios por médico ──────────────────────────────────────
 (function(){
   const data = <%=horariosJson%>;
@@ -421,7 +432,7 @@ new Chart(document.getElementById('pieChart2'),{
 
   function renderHorario(med){
     if(!med.horarios.length){
-      panel.innerHTML = '<p style="color:#64748b;font-size:.8rem;text-align:center;padding:1rem;">'+med.nombre+' ${msg["admin.no.schedules"]}</p>';
+      panel.innerHTML = '<p style="color:#64748b;font-size:.8rem;text-align:center;padding:1rem;">'+med.nombre+' '+MSG_NO_SCHEDULES+'</p>';
       return;
     }
     let html = '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>'+MSG_TH_DAY+'</th><th>'+MSG_TH_START+'</th><th>'+MSG_TH_END+'</th><th>'+MSG_TH_MAX+'</th></tr></thead><tbody>';
