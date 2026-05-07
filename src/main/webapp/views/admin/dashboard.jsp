@@ -421,7 +421,7 @@ new Chart(document.getElementById('pieChart2'),{
 
   function renderHorario(med){
     if(!med.horarios.length){
-      panel.innerHTML = '<p style="color:#64748b;font-size:.8rem;text-align:center;padding:1rem;">'+med.nombre+' no tiene horarios registrados.</p>';
+      panel.innerHTML = '<p style="color:#64748b;font-size:.8rem;text-align:center;padding:1rem;">'+med.nombre+' ${msg["admin.no.schedules"]}</p>';
       return;
     }
     let html = '<div style="overflow-x:auto;"><table class="dash-table"><thead><tr><th>'+MSG_TH_DAY+'</th><th>'+MSG_TH_START+'</th><th>'+MSG_TH_END+'</th><th>'+MSG_TH_MAX+'</th></tr></thead><tbody>';
@@ -432,10 +432,11 @@ new Chart(document.getElementById('pieChart2'),{
 
     // Resumen visual semana
     html += '<div style="display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap;">';
-    dias.forEach(function(d){
+    dias.forEach(function(d, idx){
       var tiene = med.horarios.some(function(h){ return h.dia === d; });
+      var label = MSG_DAYS_LABELS[idx] ? MSG_DAYS_LABELS[idx].substring(0,3) : d.substring(0,3);
       html += '<div style="text-align:center;padding:.4rem .7rem;border-radius:8px;font-size:.7rem;font-weight:700;background:'+(tiene?'#d1fae5':'#f1f5f9')+';color:'+(tiene?'#065f46':'#94a3b8')+';border:2px solid '+(tiene?'#6ee7b7':'#e2e8f0')+';">';
-      html += d.substring(0,3)+'<br><i class="fas '+(tiene?'fa-check-circle text-success':'fa-times-circle')+'" style="font-size:.9rem;"></i></div>';
+      html += label+'<br><i class="fas '+(tiene?'fa-check-circle text-success':'fa-times-circle')+'" style="font-size:.9rem;"></i></div>';
     });
     html += '</div>';
     panel.innerHTML = html;
