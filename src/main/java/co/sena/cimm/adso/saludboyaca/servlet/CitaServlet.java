@@ -121,7 +121,14 @@ public class CitaServlet extends HttpServlet {
     private void listar(HttpServletRequest request, HttpServletResponse response, Usuario u)
             throws ServletException, IOException {
 
+        String filtroEstado = request.getParameter("filtroEstado");
+        String filtroEspStr = request.getParameter("filtroEspecialidad");
+        Integer filtroEsp = null;
+        try { if (filtroEspStr != null && !filtroEspStr.isEmpty()) filtroEsp = Integer.parseInt(filtroEspStr); }
+        catch (NumberFormatException ignored) {}
+
         List<Cita> lista;
+        boolean usarFiltros = (filtroEstado != null && !filtroEstado.isEmpty()) || filtroEsp != null;
 
         switch (u.getRol()) {
             case "MEDICO":
@@ -129,16 +136,19 @@ public class CitaServlet extends HttpServlet {
                 break;
             case "RECEPCIONISTA":
             case "ADMINISTRADOR":
-                lista = citaDAO.listarTodas();
-                break;
             case "ENFERMERO":
-                lista = citaDAO.listarPorEstado("PROGRAMADA");
+                lista = usarFiltros
+                    ? citaDAO.listarConFiltros(filtroEsp, (filtroEstado != null && !filtroEstado.isEmpty()) ? filtroEstado : null)
+                    : citaDAO.listarTodas();
                 break;
             default:
-                lista = List.of();
+                lista = new java.util.ArrayList<>();
         }
 
         request.setAttribute("citas", lista);
+        request.setAttribute("especialidades", especialidadDAO.listar());
+        request.setAttribute("filtroEstado", filtroEstado != null ? filtroEstado : "");
+        request.setAttribute("filtroEspecialidad", filtroEspStr != null ? filtroEspStr : "");
         request.getRequestDispatcher("/views/citas/lista.jsp").forward(request, response);
     }
 

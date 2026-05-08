@@ -56,13 +56,17 @@ public class DashboardServlet extends HttpServlet {
                 enriquecerCitas(citasRecep);
                 request.setAttribute("citasHoy", citasRecep);
                 request.setAttribute("citasPendientes", citaDAO.citasPendientes().size());
+                request.setAttribute("actividadJson", mapToJson(citaDAO.citasPorDia(14)));
+                request.setAttribute("totalCitasGeneral", citaDAO.totalCitas());
                 break;
 
             case "ENFERMERO":
-                List<Cita> citasEnf = citaDAO.citasHoy();
+                List<Cita> citasEnf = citaDAO.listarTodas();
                 enriquecerCitas(citasEnf);
                 request.setAttribute("citasHoy", citasEnf);
                 request.setAttribute("totalPacientes", pacienteDAO.totalPacientes());
+                request.setAttribute("actividadJson", mapToJson(citaDAO.citasPorDia(14)));
+                request.setAttribute("totalCitasGeneral", citaDAO.totalCitas());
                 break;
 
             case "ADMINISTRADOR":

@@ -343,6 +343,45 @@ public class CitaDAO {
         return 0;
     }
 
+    // 📊 CITAS POR DÍA — últimos N días (para gráfico de actividad)
+    public java.util.Map<String, Integer> citasPorDia(int dias) {
+        java.util.Map<String, Integer> mapa = new java.util.LinkedHashMap<>();
+        String sql = "SELECT \"fechaCita\"::text AS dia, COUNT(*) AS total " +
+                     "FROM citas " +
+                     "WHERE \"fechaCita\" >= CURRENT_DATE - INTERVAL '" + dias + " days' " +
+                     "  AND \"fechaCita\" <= CURRENT_DATE " +
+                     "GROUP BY \"fechaCita\" ORDER BY \"fechaCita\"";
+        try (Connection con = Conexion.getConnection();
+             java.sql.PreparedStatement ps = con.prepareStatement(sql);
+             java.sql.ResultSet rs = ps.executeQuery()) {
+            while (rs.next())
+                mapa.put(rs.getString("dia"), rs.getInt("total"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mapa;
+    }
+
+    // 📊 LISTAR con filtros opcionales (especialidad y/o estado)
+    public List<Cita> listarConFiltros(Integer idEspecialidad, String estado) {
+        List<Cita> lista = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM citas WHERE 1=1");
+        if (idEspecialidad != null) sql.append(" AND \"idEspecialidad\" = ?");
+        if (estado != null && !estado.isEmpty()) sql.append(" AND estado = ?");
+        sql.append(" ORDER BY \"fechaCita\" DESC");
+        try (Connection con = Conexion.getConnection();
+             java.sql.PreparedStatement ps = con.prepareStatement(sql.toString())) {
+            int idx = 1;
+            if (idEspecialidad != null) ps.setInt(idx++, idEspecialidad);
+            if (estado != null && !estado.isEmpty()) ps.setString(idx, estado);
+            java.sql.ResultSet rs = ps.executeQuery();
+            while (rs.next()) lista.add(mapear(rs));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
     // 🔧 MAPEAR
     private Cita mapear(ResultSet rs) throws SQLException {
 

@@ -8,13 +8,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+
 
 @WebServlet("/recuperar")
 public class RecuperarPasswordServlet extends HttpServlet {
@@ -25,10 +20,6 @@ public class RecuperarPasswordServlet extends HttpServlet {
     // ── Sesion keys ───────────────────────────────────────────────
     private static final String SK_USR = "recuperar_usuario";
     private static final String SK_PASO = "recuperar_paso";
-
-    // ── Brevo config (misma que LoginServlet) ─────────────────────
-    private static final String BREVO_API_KEY = System.getenv("BREVO_API_KEY");
-    private static final String REMITENTE = "dayanakarenacostabuitrago@gmail.com";
 
     // ─────────────────────────────────────────────────────────────
     // GET
@@ -55,7 +46,7 @@ public class RecuperarPasswordServlet extends HttpServlet {
                 break;
 
             case "verificar":
-                // Solo si ya se solicito el codigo
+                // Solo si ya se solicitó el código
                 if (!pasoValido(session, "verificar")) {
                     res.sendRedirect(req.getContextPath() + "/recuperar?paso=solicitar");
                     return;
@@ -103,42 +94,32 @@ public class RecuperarPasswordServlet extends HttpServlet {
     }
 
     // ─────────────────────────────────────────────────────────────
-    // PASO 1 — Buscar email y enviar codigo
+    // PASO 1 — Buscar email y enviar código
     // ─────────────────────────────────────────────────────────────
     private void procesarSolicitud(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
         String email = req.getParameter("email");
         if (email == null || email.trim().isEmpty()) {
-            forward(req, res, "solicitar", "Ingresa tu correo electronico.", null);
+            forward(req, res, "solicitar", "Ingresa tu correo electrónico.", null);
             return;
         }
         email = email.trim().toLowerCase();
 
         Usuario u = usuarioDAO.buscarPorEmail(email);
         if (u == null) {
-            // Mensaje neutral — no revelar si el email existe o no (seguridad)
+            // Mensaje neutro — no revelar si el email existe o no (seguridad)
             forward(req, res, "solicitar", null,
-                    "Si el correo esta registrado, recibiras un codigo en breve.");
+                    "Si el correo está registrado, recibirás un código en breve.");
             return;
         }
 
-        // Generar y enviar codigo OTP de 6 digitos
+        // Generar y enviar código OTP de 6 dígitos
         String codigo = String.valueOf((int) (Math.random() * 900000) + 100000);
-
-        // Enviar correo via Brevo (igual que LoginServlet)
-        boolean enviado = enviarCorreoBrevo(u.getEmail(), u.getNombres(), codigo);
-
-        if (!enviado) {
-            forward(req, res, "solicitar",
-                "No se pudo enviar el codigo. Intenta de nuevo mas tarde.", null);
-            return;
-        }
-
-        // Guardar en BD solo si se envio el correo
         otpDAO.insertar(u.getIdUsuario(), codigo);
+        enviarCorreoRecuperacion(u.getEmail(), u.getNombres(), codigo);
 
-        // Guardar estado en sesion (nunca exponer el ID directamente en la URL)
+        // Guardar estado en sesión (nunca exponer el ID directamente en la URL)
         HttpSession session = req.getSession();
         session.setAttribute(SK_USR, u);
         session.setAttribute(SK_PASO, "verificar");
@@ -146,11 +127,11 @@ public class RecuperarPasswordServlet extends HttpServlet {
         // Mostrar email enmascarado al usuario
         req.setAttribute("emailMasked", enmascararEmail(u.getEmail()));
         forward(req, res, "verificar", null,
-                "Codigo enviado a " + enmascararEmail(u.getEmail()));
+                "Código enviado a " + enmascararEmail(u.getEmail()));
     }
 
     // ─────────────────────────────────────────────────────────────
-    // PASO 2 — Verificar codigo OTP
+    // PASO 2 — Verificar código OTP
     // ─────────────────────────────────────────────────────────────
     private void procesarVerificacion(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -166,24 +147,24 @@ public class RecuperarPasswordServlet extends HttpServlet {
 
         if (codigo == null || codigo.trim().isEmpty()) {
             req.setAttribute("emailMasked", enmascararEmail(u.getEmail()));
-            forward(req, res, "verificar", "Ingresa el codigo de 6 digitos.", null);
+            forward(req, res, "verificar", "Ingresa el código de 6 dígitos.", null);
             return;
         }
 
         boolean valido = otpDAO.validar(u.getIdUsuario(), codigo.trim());
         if (!valido) {
             req.setAttribute("emailMasked", enmascararEmail(u.getEmail()));
-            forward(req, res, "verificar", "Codigo incorrecto o expirado. Intentelo de nuevo.", null);
+            forward(req, res, "verificar", "Código incorrecto o expirado. Inténtalo de nuevo.", null);
             return;
         }
 
-        // Codigo correcto -> avanzar a nueva contrasena
+        // Código correcto → avanzar a nueva contraseña
         session.setAttribute(SK_PASO, "nueva");
         forward(req, res, "nueva", null, null);
     }
 
     // ─────────────────────────────────────────────────────────────
-    // PASO 3 — Guardar nueva contrasena
+    // PASO 3 — Guardar nueva contraseña
     // ─────────────────────────────────────────────────────────────
     private void procesarNuevaPassword(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -198,119 +179,27 @@ public class RecuperarPasswordServlet extends HttpServlet {
         String confirmar = req.getParameter("confirmar");
 
         if (nueva == null || nueva.trim().length() < 6) {
-            forward(req, res, "nueva", "La contrasena debe tener al menos 6 caracteres.", null);
+            forward(req, res, "nueva", "La contraseña debe tener al menos 6 caracteres.", null);
             return;
         }
         if (!nueva.equals(confirmar)) {
-            forward(req, res, "nueva", "Las contrasenas no coinciden.", null);
+            forward(req, res, "nueva", "Las contraseñas no coinciden.", null);
             return;
         }
 
         Usuario u = (Usuario) session.getAttribute(SK_USR);
         boolean ok = usuarioDAO.actualizarPassword(u.getIdUsuario(), nueva.trim());
 
-        // Limpiar sesion de recuperacion siempre
+        // Limpiar sesión de recuperación siempre
         session.removeAttribute(SK_USR);
         session.removeAttribute(SK_PASO);
 
         if (ok) {
-            // Redirigir al login con mensaje de exito
+            // Redirigir al login con mensaje de éxito
             res.sendRedirect(req.getContextPath() + "/login?recuperado=ok");
         } else {
-            forward(req, res, "nueva", "Error al actualizar la contrasena. Intenta de nuevo.", null);
+            forward(req, res, "nueva", "Error al actualizar la contraseña. Intenta de nuevo.", null);
         }
-    }
-
-    // ─────────────────────────────────────────────────────────────
-    // BREVO API — Enviar correo de recuperacion
-    // ─────────────────────────────────────────────────────────────
-    private boolean enviarCorreoBrevo(String destino, String nombre, String codigo) {
-
-        if (BREVO_API_KEY == null || BREVO_API_KEY.trim().isEmpty()) {
-            System.err.println("[RecuperarPasswordServlet] ERROR: BREVO_API_KEY no configurada.");
-            return false;
-        }
-
-        try {
-            URL url = new URL("https://api.brevo.com/v3/smtp/email");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("accept", "application/json");
-            conn.setRequestProperty("api-key", BREVO_API_KEY);
-            conn.setRequestProperty("content-type", "application/json");
-            conn.setDoOutput(true);
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(10000);
-
-            String htmlContent = "<!DOCTYPE html>" +
-                "<html><head><meta charset='UTF-8'></head><body>" +
-                "<div style='font-family:Arial,sans-serif;max-width:600px;margin:0 auto;'>" +
-                "<div style='background:#2d5a47;padding:24px;text-align:center;border-radius:12px 12px 0 0;'>" +
-                "<h2 style='color:#fff;margin:0;'>SaludBoyaca</h2>" +
-                "</div>" +
-                "<div style='background:#fff;border:1px solid #dce9e4;border-top:none;padding:32px;border-radius:0 0 12px 12px;'>" +
-                "<p style='color:#1a2e26;font-size:16px;'>Hola <strong>" + nombre + "</strong>,</p>" +
-                "<p style='color:#4a6258;font-size:14px;line-height:1.6;'>Recibimos una solicitud para recuperar tu contrasena en SaludBoyaca.</p>" +
-                "<p style='color:#4a6258;font-size:14px;'>Tu codigo de verificacion es:</p>" +
-                "<div style='text-align:center;margin:28px 0;'>" +
-                "<span style='font-size:36px;font-weight:900;letter-spacing:8px;color:#2d5a47;" +
-                "background:#e8f2ee;padding:16px 32px;border-radius:12px;display:inline-block;'>" + codigo + "</span>" +
-                "</div>" +
-                "<p style='color:#7a9a8e;font-size:13px;'>Este codigo es valido por <strong>5 minutos</strong>.</p>" +
-                "<p style='color:#7a9a8e;font-size:13px;'>Si no solicitaste este codigo, ignora este mensaje.</p>" +
-                "<hr style='border:none;border-top:1px solid #dce9e4;margin:24px 0;'>" +
-                "<p style='color:#aab8b3;font-size:12px;text-align:center;'> 2025 SaludBoyaca</p>" +
-                "</div></div></body></html>";
-
-            String json = "{" +
-                "\"sender\":{\"name\":\"SaludBoyaca\",\"email\":\"" + REMITENTE + "\"}," +
-                "\"to\":[{\"email\":\"" + destino + "\",\"name\":\"" + nombre + "\"}]," +
-                "\"subject\":\"Recuperar contrasena - SaludBoyaca\"," +
-                "\"htmlContent\":" + escapeJson(htmlContent) + "," +
-                "\"textContent\":\"Tu codigo de recuperacion es: " + codigo + ". Valido por 5 minutos.\"" +
-                "}";
-
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(json.getBytes(StandardCharsets.UTF_8));
-            }
-
-            int responseCode = conn.getResponseCode();
-
-            StringBuilder response = new StringBuilder();
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(
-                        responseCode >= 200 && responseCode < 300
-                            ? conn.getInputStream()
-                            : conn.getErrorStream(),
-                        StandardCharsets.UTF_8))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    response.append(line);
-                }
-            }
-
-            if (responseCode == 201) {
-                System.out.println("[RecuperarPasswordServlet] Correo enviado a: " + destino);
-                return true;
-            } else {
-                System.err.println("[RecuperarPasswordServlet] Error Brevo - Codigo: " + responseCode);
-                System.err.println("[RecuperarPasswordServlet] Respuesta: " + response);
-                return false;
-            }
-
-        } catch (Exception e) {
-            System.err.println("[RecuperarPasswordServlet] Error enviando correo: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    // Helper para escapar JSON
-    private String escapeJson(String s) {
-        return "\"" + s.replace("\\", "\\\\")
-                       .replace("\"", "\\\"")
-                       .replace("\n", "\\n")
-                       .replace("\r", "\\r") + "\"";
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -329,7 +218,7 @@ public class RecuperarPasswordServlet extends HttpServlet {
     }
 
     // ─────────────────────────────────────────────────────────────
-    // HELPER — Verificar que el paso de la sesion coincide
+    // HELPER — Verificar que el paso de la sesión coincide
     // ─────────────────────────────────────────────────────────────
     private boolean pasoValido(HttpSession session, String pasoEsperado) {
         if (session == null)
@@ -350,5 +239,66 @@ public class RecuperarPasswordServlet extends HttpServlet {
         if (local.length() <= 3)
             return local + "***@" + dom;
         return local.substring(0, 3) + "***@" + dom;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // HELPER — Enviar correo de recuperación
+    // ─────────────────────────────────────────────────────────────
+    private void enviarCorreoRecuperacion(String destino, String nombre, String codigo) {
+
+        final String remitente  = "dayanakarenacostabuitrago@gmail.com";
+        final String BREVO_API_KEY = System.getenv("BREVO_API_KEY");
+
+        try {
+            java.net.URL url = new java.net.URL("https://api.brevo.com/v3/smtp/email");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("accept", "application/json");
+            conn.setRequestProperty("api-key", BREVO_API_KEY);
+            conn.setRequestProperty("content-type", "application/json");
+            conn.setDoOutput(true);
+
+            String html = "<div style='font-family:sans-serif;max-width:520px;margin:auto;'>"
+                + "<div style='background:linear-gradient(135deg,#2d5a47,#4d7a68);padding:28px;border-radius:14px 14px 0 0;'>"
+                + "<h2 style='color:#fff;margin:0;font-size:1.2rem;'>&#128274; Recuperaci&#243;n de contrase&#241;a</h2>"
+                + "<p style='color:rgba(255,255,255,.75);margin:4px 0 0;font-size:.85rem;'>SaludBoyac&#225;</p>"
+                + "</div>"
+                + "<div style='background:#fff;border:1px solid #dce9e4;border-top:none;padding:32px;border-radius:0 0 14px 14px;'>"
+                + "<p style='color:#1a2e26;'>Hola <strong>" + nombre + "</strong>,</p>"
+                + "<p style='color:#4a6258;'>Tu c&#243;digo de verificaci&#243;n para recuperar tu contrase&#241;a es:</p>"
+                + "<div style='text-align:center;margin:28px 0;'>"
+                + "<span style='font-size:2.6rem;font-weight:900;letter-spacing:.4em;color:#2d5a47;"
+                + "background:#e8f2ee;padding:16px 32px;border-radius:14px;display:inline-block;'>"
+                + codigo + "</span></div>"
+                + "<p style='color:#9a7200;font-size:.85rem;background:#fff8e1;padding:10px 14px;border-radius:8px;border:1px solid #f0d080;'>"
+                + "&#9201; V&#225;lido por <strong>5 minutos</strong>. Si no solicitaste este c&#243;digo, ignora este mensaje.</p>"
+                + "<hr style='border:none;border-top:1px solid #dce9e4;margin:20px 0;'>"
+                + "<p style='color:#aab8b3;font-size:.75rem;'>&#169; 2025 SaludBoyac&#225;</p>"
+                + "</div></div>";
+
+            // Escapar comillas para JSON
+            String htmlEscaped = html.replace("\\", "\\\\").replace("\"", "\\\"");
+
+            String json = "{"
+                + "\"sender\":{\"name\":\"SaludBoyaca\",\"email\":\"" + remitente + "\"},"
+                + "\"to\":[{\"email\":\"" + destino + "\"}],"
+                + "\"subject\":\"Recuperar contrase\\u00f1a \\u2014 SaludBoyac\\u00e1\","
+                + "\"htmlContent\":\"" + htmlEscaped + "\""
+                + "}";
+
+            try (java.io.OutputStream os = conn.getOutputStream()) {
+                os.write(json.getBytes("UTF-8"));
+            }
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == 201) {
+                System.out.println("[RecuperarPasswordServlet] Correo enviado a: " + destino);
+            } else {
+                System.err.println("[RecuperarPasswordServlet] Error Brevo API: " + responseCode);
+            }
+
+        } catch (Exception e) {
+            System.err.println("[RecuperarPasswordServlet] Error enviando correo: " + e.getMessage());
+        }
     }
 }
