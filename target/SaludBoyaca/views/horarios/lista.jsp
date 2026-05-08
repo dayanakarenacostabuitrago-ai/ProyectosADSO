@@ -159,9 +159,8 @@
                         </p>
                     </div>
                 </c:when>
-
-                <!-- Cards de horarios -->
                 <c:otherwise>
+                    <!-- Cards de horarios -->
                     <div class="horario-cards">
                         <c:forEach var="h" items="${horarios}">
                             <div class="h-card">
