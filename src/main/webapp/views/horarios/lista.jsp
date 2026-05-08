@@ -224,9 +224,10 @@
                                                class="h-btn h-btn-edit">
                                                 <i class="fas fa-edit"></i> <fmt:message key="horario.btn.update"/>
                                             </a>
+                                            <fmt:message key="horario.confirm.delete" var="confirmMsg"/>
                                             <a href="${pageContext.request.contextPath}/horarios?accion=eliminar&id=${h.idHorario}"
                                                class="h-btn h-btn-del"
-                                               onclick="return confirm('${msg[\"horario.confirm.delete\"]}')">
+                                               onclick="return confirm('${confirmMsg}')">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </div>
