@@ -45,9 +45,15 @@ public class DashboardServlet extends HttpServlet {
         switch (rol) {
 
             case "MEDICO":
-                List<Cita> citasMedico = citaDAO.listarPorMedico(u.getIdUsuario());
+                List<Cita> citasMedico = citaDAO.citasHoyMedico(u.getIdUsuario());
                 enriquecerCitas(citasMedico);
                 request.setAttribute("citasHoy", citasMedico);
+                request.setAttribute("actividadJson", mapToJson(citaDAO.citasPorDiaMedico(u.getIdUsuario(), 14)));
+                // totalPacientes = pacientes únicos del médico (aprox. citas totales únicas)
+                List<Cita> todasMedico = citaDAO.listarPorMedico(u.getIdUsuario());
+                java.util.Set<Integer> pacientesUnicos = new java.util.HashSet<>();
+                for (Cita c : todasMedico) pacientesUnicos.add(c.getIdPaciente());
+                request.setAttribute("totalPacientes", pacientesUnicos.size());
                 break;
 
             case "RECEPCIONISTA":

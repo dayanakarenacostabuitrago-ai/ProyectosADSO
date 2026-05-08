@@ -85,7 +85,10 @@
                     <%= editing ? "" : "" %><fmt:message key="<%= editing ? \"horario.btn.edit\" : \"horario.btn.new\" %>"/>
                 </h5>
                 <small class="opacity-75">
-                    <%= editing ? "${msg[\"horario.form.edit.subtitle\"]}" : "${msg[\"horario.form.new.subtitle\"]}" %>
+                    <c:choose>
+                        <c:when test="${not empty horario}"><fmt:message key="horario.form.edit.subtitle"/></c:when>
+                        <c:otherwise><fmt:message key="horario.form.new.subtitle"/></c:otherwise>
+                    </c:choose>
                 </small>
             </div>
             <a href="${pageContext.request.contextPath}/horarios?accion=listar" class="btn-volver">
@@ -159,7 +162,10 @@
                     </a>
                     <button type="submit" class="btn-guardar">
                         <i class="fas fa-save me-1"></i>
-                        <%= editing ? "${msg[\"horario.btn.update\"]}" : "${msg[\"horario.btn.save\"]}" %>
+                        <c:choose>
+                            <c:when test="${not empty horario}"><fmt:message key="horario.btn.update"/></c:when>
+                            <c:otherwise><fmt:message key="horario.btn.save"/></c:otherwise>
+                        </c:choose>
                     </button>
                 </div>
             </form>

@@ -137,7 +137,38 @@ public class CitaDAO {
         return lista;
     }
 
-    // ✅ LISTAR POR MÉDICO
+    // 📊 CITAS DE HOY PARA UN MÉDICO ESPECÍFICO
+    public List<Cita> citasHoyMedico(int idUsuario) {
+        List<Cita> lista = new ArrayList<>();
+        String sql = "SELECT * FROM citas WHERE \"idUsuario\"=? AND \"fechaCita\" = CURRENT_DATE ORDER BY \"horaCita\"";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) lista.add(mapear(rs));
+        } catch (Exception e) { e.printStackTrace(); }
+        return lista;
+    }
+
+    // 📊 ACTIVIDAD POR DÍA PARA UN MÉDICO ESPECÍFICO (últimos N días)
+    public java.util.Map<String, Integer> citasPorDiaMedico(int idUsuario, int dias) {
+        java.util.Map<String, Integer> mapa = new java.util.LinkedHashMap<>();
+        String sql = "SELECT \"fechaCita\"::text AS dia, COUNT(*) AS total " +
+                     "FROM citas " +
+                     "WHERE \"idUsuario\"=? " +
+                     "  AND \"fechaCita\" >= CURRENT_DATE - INTERVAL '" + dias + " days' " +
+                     "  AND \"fechaCita\" <= CURRENT_DATE " +
+                     "GROUP BY \"fechaCita\" ORDER BY \"fechaCita\"";
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            java.sql.ResultSet rs = ps.executeQuery();
+            while (rs.next()) mapa.put(rs.getString("dia"), rs.getInt("total"));
+        } catch (Exception e) { e.printStackTrace(); }
+        return mapa;
+    }
+
+    // 📊 LISTAR POR MÉDICO (TODAS)
     public List<Cita> listarPorMedico(int idUsuario) {
 
         List<Cita> lista = new ArrayList<>();

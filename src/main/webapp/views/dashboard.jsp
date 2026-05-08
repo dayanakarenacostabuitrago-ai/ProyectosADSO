@@ -40,12 +40,13 @@
     /* ── Grid 2 columnas ── */
     .dash-grid {
       display: grid;
-      grid-template-columns: 1fr 290px;
-      gap: 1.1rem;
+      grid-template-columns: 1fr 280px;
+      gap: 1rem;
       padding: 0;
       align-items: start;
     }
-    @media (max-width:992px){ .dash-grid { grid-template-columns:1fr; } }
+    @media (max-width:1100px){ .dash-grid { grid-template-columns: 1fr 260px; } }
+    @media (max-width:992px){  .dash-grid { grid-template-columns: 1fr; } }
 
     /* ── Card base ── */
     .db-card {
@@ -95,7 +96,7 @@
     }
 
     /* ── Mini stat cards ── */
-    .mini-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:.85rem; margin-bottom:1.1rem; }
+    .mini-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:.75rem; margin-bottom:1rem; }
     .msc {
       background:var(--white); border-radius:var(--radius-sm);
       border:1px solid var(--border); padding:.85rem 1rem;
@@ -111,6 +112,8 @@
 
     /* ── Chart ── */
     .chart-wrap { padding:.7rem 1.2rem 1rem; }
+    .chart-inner { display:flex; gap:1rem; align-items:start; }
+    .chart-canvas-wrap { flex:1; min-height:160px; position:relative; }
     .cs-side { display:flex; flex-direction:column; gap:.5rem; }
     .cs-item {
       display:flex; align-items:center; gap:.55rem;
@@ -327,8 +330,8 @@
           <div class="pill-tag"><i class="fas fa-calendar-alt"></i><span id="mesLabel">Cargando...</span></div>
         </div>
         <div class="chart-wrap">
-          <div class="d-flex gap-3 align-items-start">
-            <div style="flex:1; min-height:155px;">
+          <div class="chart-inner">
+            <div class="chart-canvas-wrap">
               <canvas id="actividadChart" height="145"></canvas>
             </div>
             <div class="cs-side">
@@ -341,7 +344,7 @@
                 <div><div class="cs-n">${programadasCount}</div><div class="cs-l"><fmt:message key="stat.scheduled"/></div></div>
               </div>
             </div>
-          </div>
+          </div><%-- /chart-inner --%>
         </div>
       </div>
 
